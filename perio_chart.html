@@ -22,12 +22,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;padding:14px;}
-
-/* ── PHASES ── */
 #setupPhase, #chartPhase { display: none; }
 #setupPhase.active, #chartPhase.active { display: block; }
-
-/* ── SETUP SCREEN ── */
 .setup-card {
   max-width: 640px; margin: 60px auto;
   background: var(--surface);
@@ -43,13 +39,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .setup-card p { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
 .setup-field { margin-bottom: 18px; }
 .setup-field label { display: block; font-size: 11px; font-family:'DM Mono',monospace; color: var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
-.setup-field input, .setup-field select {
+.setup-field input {
   width: 100%; background: var(--surface2); border: 1px solid var(--border);
   color: var(--text); padding: 9px 12px; border-radius: 8px;
   font-family:'DM Sans',sans-serif; font-size:13px;
 }
-.setup-field input:focus, .setup-field select:focus { outline:none; border-color: var(--accent); }
-
+.setup-field input:focus { outline:none; border-color: var(--accent); }
 .missing-grid {
   display: grid; grid-template-columns: repeat(16, 1fr); gap: 4px; margin-top: 8px;
 }
@@ -62,7 +57,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 }
 .missing-btn:hover { border-color: var(--red); color: var(--red); }
 .missing-btn.marked { background: rgba(248,113,113,.15); border-color: var(--red); color: var(--red); text-decoration: line-through; }
-
 .missing-voice-row {
   display: flex; gap: 8px; align-items: center; margin-top: 10px;
 }
@@ -72,10 +66,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   font-family:'DM Mono',monospace; font-size:13px;
 }
 .missing-voice-row input:focus { outline:none; border-color:var(--accent); }
-
 .arch-row { display:flex; gap:4px; margin-bottom:6px; }
 .arch-label-s { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); width:48px; display:flex; align-items:center; }
-
 .start-btn {
   width:100%; padding:14px; margin-top:24px;
   background: var(--accent); color:#0d1117;
@@ -84,8 +76,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   transition: opacity .15s;
 }
 .start-btn:hover { opacity:.85; }
-
-/* ── CHART HEADER ── */
 header {
   display:flex; align-items:center; justify-content:space-between;
   margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border);
@@ -94,12 +84,10 @@ header {
 .header-left h1 { font-family:'DM Mono',monospace; font-size:15px; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; }
 .header-left .pt-info { font-size:12px; color:var(--muted); margin-top:2px; }
 .header-right { display:flex; gap:8px; flex-wrap:wrap; }
-
-/* ── MIC ZONE ── */
 .mic-zone {
   display:flex; align-items:center; gap:12px;
   background:var(--surface); border:1px solid var(--border);
-  border-radius:10px; padding:10px 14px; margin-bottom:14px;
+  border-radius:10px; padding:10px 14px; margin-bottom:8px;
 }
 #micBtn {
   width:44px; height:44px; border-radius:50%; border:2px solid var(--border);
@@ -119,30 +107,30 @@ header {
 #cmdLog { font-family:'DM Mono',monospace; font-size:11px; padding:4px 10px; background:var(--surface2); border:1px solid var(--border); border-radius:5px; color:var(--green); flex-shrink:0; max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 #cmdLog.error { color:var(--red); }
 #cursorPos { font-family:'DM Mono',monospace; font-size:12px; padding:5px 10px; background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--accent); flex-shrink:0; white-space:nowrap; }
-
-/* ── CONTROLS ── */
+.keyboard-zone { margin-bottom:12px; }
+.keyboard-zone input {
+  width:100%; background:var(--surface); border:1px solid var(--border);
+  color:var(--text); padding:10px 14px; border-radius:8px;
+  font-family:'DM Mono',monospace; font-size:13px;
+  transition: border-color .15s;
+}
+.keyboard-zone input:focus { outline:none; border-color:var(--accent); background:var(--surface2); }
+.keyboard-zone input::placeholder { color:var(--muted); font-size:12px; }
 .controls { display:flex; gap:7px; margin-bottom:14px; flex-wrap:wrap; }
 .btn { padding:6px 13px; border-radius:7px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; transition:all .15s; white-space:nowrap; }
 .btn:hover { border-color:var(--accent); color:var(--accent); }
 .btn.danger:hover { border-color:var(--red); color:var(--red); }
-.btn.primary { background:var(--accent); color:#0d1117; border-color:var(--accent); font-weight:600; }
-.btn.primary:hover { opacity:.85; }
 .btn.amber { background:var(--amber); color:#0d1117; border-color:var(--amber); font-weight:600; }
 .btn.amber:hover { opacity:.85; }
-
-/* ── PROGRESS BAR ── */
 .progress-wrap { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 12px; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
 .progress-label { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
 .progress-bar { flex:1; height:6px; background:var(--surface2); border-radius:3px; overflow:hidden; }
 .progress-fill { height:100%; background:var(--accent); border-radius:3px; transition:width .3s; }
 .progress-pct { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); width:36px; text-align:right; }
-
-/* ── ARCH ── */
 .arch-section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:12px; overflow-x:auto; }
 .arch-title { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; }
 .tooth-row { display:flex; gap:3px; min-width:max-content; }
 .tooth-col { display:flex; flex-direction:column; align-items:center; width:56px; }
-
 .pocket-group { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; width:100%; margin:2px 0; }
 .pc {
   background:var(--surface2); border:1px solid var(--border); border-radius:4px;
@@ -158,7 +146,6 @@ header {
 .pc.d6plus { color:var(--red); background:rgba(248,113,113,.08); }
 .pc.bleed { border-bottom:3px solid var(--red)!important; }
 .pc.supp { border-bottom:3px solid var(--purple)!important; }
-
 .tooth-num {
   font-family:'DM Mono',monospace; font-size:11px; color:var(--muted);
   background:var(--surface2); border-radius:4px; padding:2px 4px; margin:3px 0;
@@ -169,36 +156,26 @@ header {
 .tooth-num.selected { background:var(--accent); color:#0d1117; border-color:var(--accent); font-weight:700; }
 .tooth-num.missing { opacity:.25; text-decoration:line-through; pointer-events:none; }
 .tooth-num.implant { border-color:var(--blue); color:var(--blue); }
-
 .furc-row { display:flex; gap:2px; width:100%; margin:2px 0; }
 .fc { flex:1; height:13px; border-radius:3px; background:var(--surface2); border:1px solid var(--border); cursor:pointer; font-size:8px; display:flex; align-items:center; justify-content:center; color:var(--muted); transition:all .12s; }
 .fc.f1 { background:rgba(245,158,11,.25); border-color:var(--amber); color:var(--amber); }
 .fc.f2 { background:rgba(248,113,113,.25); border-color:var(--red); color:var(--red); }
 .fc.f3 { background:rgba(248,113,113,.5); border-color:var(--red); color:var(--red); }
-
 .divider { display:flex; align-items:center; gap:6px; margin:5px 0; }
 .divider span { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
 .divider hr { flex:1; border:none; border-top:1px solid var(--border); }
-
-/* ── LEGEND ── */
 .legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
 .li { display:flex; align-items:center; gap:4px; font-size:11px; color:var(--muted); }
 .dot { width:9px; height:9px; border-radius:50%; }
-
-/* ── NOTES ── */
 .notes-area { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:12px; }
 .notes-area label { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.07em; display:block; margin-bottom:6px; }
 .notes-area textarea { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:8px 10px; font-family:'DM Sans',sans-serif; font-size:12px; resize:vertical; min-height:55px; }
 .notes-area textarea:focus { outline:none; border-color:var(--accent); }
-
-/* ── NO SUPPORT ── */
 #noSupport { display:none; background:rgba(248,113,113,.1); border:1px solid var(--red); color:var(--red); padding:10px 14px; border-radius:8px; font-size:12px; margin-bottom:12px; }
-
-/* ── PRINT ── */
 @media print {
   body { background:#fff; color:#000; padding:8px; font-size:11px; }
   #setupPhase { display:none!important; }
-  .mic-zone, .controls, .progress-wrap, .legend, #noSupport, .notes-area { display:none!important; }
+  .mic-zone, .keyboard-zone, .controls, .progress-wrap, .legend, #noSupport, .notes-area { display:none!important; }
   .arch-section { background:#fff; border:1px solid #ccc; page-break-inside:avoid; }
   .pc { background:#f9f9f9; border-color:#ccc; color:#000; font-size:10px; min-height:20px; }
   .pc.active { background:#f9f9f9!important; box-shadow:none!important; }
@@ -217,7 +194,6 @@ header {
   .fc.f2, .fc.f3 { background:#fee2e2; border-color:#dc2626; color:#991b1b; }
   @page { margin: 0.5in; size: landscape; }
 }
-
 ::-webkit-scrollbar{height:4px;width:4px;}
 ::-webkit-scrollbar-track{background:var(--surface);}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
@@ -225,14 +201,10 @@ header {
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     PHASE 1 — SETUP
-═══════════════════════════════════════════ -->
 <div id="setupPhase" class="active">
   <div class="setup-card">
     <h2>⬡ New Perio Chart</h2>
     <p>Enter patient info and mark any missing teeth before charting begins.</p>
-
     <div class="setup-field">
       <label>Patient Name</label>
       <input type="text" id="setupName" placeholder="First Last" />
@@ -247,9 +219,8 @@ header {
         <input type="text" id="setupProvider" placeholder="Dr. Name" />
       </div>
     </div>
-
     <div class="setup-field">
-      <label>Missing Teeth — click to mark, or use voice below</label>
+      <label>Missing Teeth — click to mark, or type below</label>
       <div class="arch-row">
         <div class="arch-label-s">Upper</div>
         <div class="missing-grid" id="missingUpper"></div>
@@ -259,7 +230,6 @@ header {
         <div class="missing-grid" id="missingLower"></div>
       </div>
     </div>
-
     <div class="setup-field">
       <label>Or type / say missing teeth (e.g. "1, 16, 17, 32")</label>
       <div class="missing-voice-row">
@@ -268,17 +238,12 @@ header {
         <button class="btn" id="setupMicBtn" onclick="toggleSetupMic()">🎤 Say teeth</button>
       </div>
     </div>
-
     <button class="start-btn" onclick="startCharting()">Start Charting →</button>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PHASE 2 — CHARTING
-═══════════════════════════════════════════ -->
 <div id="chartPhase">
   <div id="noSupport">⚠ Speech recognition not supported. Use Chrome or Edge.</div>
-
   <header>
     <div class="header-left">
       <h1>⬡ Perio Chart</h1>
@@ -296,15 +261,18 @@ header {
   <div class="mic-zone">
     <button id="micBtn" onclick="toggleMic()">🎤</button>
     <div class="mic-info">
-      <div class="mic-status" id="micStatus">Click mic to start voice charting</div>
+      <div class="mic-status" id="micStatus">Say <strong style="color:var(--accent)">"start charting"</strong> or click mic</div>
       <div id="transcript">—</div>
     </div>
     <div id="cmdLog">Ready</div>
     <div id="cursorPos">—</div>
   </div>
+  <div class="keyboard-zone">
+    <input type="text" id="kbInput" placeholder='⌨ Type numbers or command + Enter — e.g. "3 2 3" or "back" or "bleed" or "tooth 14"' autocomplete="off" />
+  </div>
 
   <div class="progress-wrap">
-    <div class="progress-label" id="progressLabel">Buccal pass</div>
+    <div class="progress-label" id="progressLabel">Buccal pass →</div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-pct" id="progressPct">0%</div>
   </div>
@@ -322,7 +290,7 @@ header {
     <div class="li"><div class="dot" style="background:var(--amber)"></div>4mm</div>
     <div class="li"><div class="dot" style="background:var(--red);opacity:.6"></div>5mm+</div>
     <div class="li"><div class="dot" style="background:var(--blue)"></div>Implant</div>
-    <span style="color:var(--muted);font-size:11px;">| Say: numbers, "bleed", "suppress", "furcation 2", "missing", "implant", "next", "buccal", "lingual"</span>
+    <span style="color:var(--muted);font-size:11px;">| <strong style="color:var(--accent)">"start charting"</strong> → numbers → <strong style="color:var(--accent)">"back"</strong> → "bleed" → "supp" → "furcation 2" → "next tooth"</span>
   </div>
 
   <div id="upperArch" class="arch-section"></div>
@@ -335,522 +303,272 @@ header {
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════
-// CONSTANTS
-// ══════════════════════════════════════════════════════
 const UPPER = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 const LOWER = [32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17];
 const ALL_TEETH = [...UPPER, ...LOWER];
+const BUCCAL_ORDER = [...UPPER, ...LOWER];
+const LINGUAL_ORDER = [...LOWER].reverse().concat([...UPPER].reverse());
 
-// Traversal order:
-// Phase A: ALL buccal surfaces left to right (upper #1→16, then lower #32→17)
-// Phase B: ALL lingual surfaces right to left (lower #17→32, then upper #16→1)
-// Within each tooth: 3 cells (distal, mid, mesial for buccal; mesial, mid, distal for lingual)
-
-// ══════════════════════════════════════════════════════
-// DATA
-// ══════════════════════════════════════════════════════
-let chart = {};
-let patientName = '', visitDate = '', provider = '';
-let autoAdvance = true;
+let chart = {}, patientName='', visitDate='', provider='', autoAdvance=true;
+let sequence=[], seqIdx=0, waitingForStart=true;
+let recognition=null, listening=false, setupRecognition=null, setupListening=false;
 
 function initChart() {
   chart = {};
   ALL_TEETH.forEach(t => {
-    chart[t] = {
-      buccal:  [null,null,null],
-      lingual: [null,null,null],
-      bleedB:  [false,false,false],
-      bleedL:  [false,false,false],
-      suppB:   [false,false,false],
-      suppL:   [false,false,false],
-      furc:    [0,0,0],
-      missing: false,
-      implant: false
-    };
+    chart[t] = { buccal:[null,null,null], lingual:[null,null,null], bleedB:[false,false,false], bleedL:[false,false,false], suppB:[false,false,false], suppL:[false,false,false], furc:[0,0,0], missing:false, implant:false };
   });
 }
 initChart();
 
-// ══════════════════════════════════════════════════════
-// TRAVERSAL SEQUENCE
-// Build flat list of {tooth, side, pos} skipping missing
-// ══════════════════════════════════════════════════════
-// Buccal: upper L→R then lower L→R (as displayed)
-// Lingual: lower R→L then upper R→L (return sweep)
-const BUCCAL_ORDER = [...UPPER, ...LOWER]; // 1..16, 32..17
-const LINGUAL_ORDER = [...LOWER].reverse().concat([...UPPER].reverse()); // 17..32, 16..1
-
-let sequence = [];
-let seqIdx = 0;
-
 function buildSequence() {
   sequence = [];
-  BUCCAL_ORDER.forEach(t => {
-    if (chart[t].missing) return;
-    [0,1,2].forEach(p => sequence.push({tooth:t, side:'buccal', pos:p}));
-  });
-  LINGUAL_ORDER.forEach(t => {
-    if (chart[t].missing) return;
-    [0,1,2].forEach(p => sequence.push({tooth:t, side:'lingual', pos:p}));
-  });
+  BUCCAL_ORDER.forEach(t => { if(chart[t].missing) return; [0,1,2].forEach(p => sequence.push({tooth:t,side:'buccal',pos:p})); });
+  LINGUAL_ORDER.forEach(t => { if(chart[t].missing) return; [0,1,2].forEach(p => sequence.push({tooth:t,side:'lingual',pos:p})); });
 }
 
 function cur() { return sequence[seqIdx] || sequence[sequence.length-1]; }
 
 function advanceCursor(steps=1) {
-  seqIdx = Math.min(seqIdx + steps, sequence.length - 1);
-  updateProgress();
-  updateCursorDisplay();
-  highlightActive();
+  seqIdx = Math.min(seqIdx+steps, sequence.length-1);
+  updateProgress(); updateCursorDisplay(); highlightActive();
 }
-
 function jumpPrev() {
-  seqIdx = Math.max(seqIdx - 1, 0);
-  updateProgress();
-  updateCursorDisplay();
-  highlightActive();
+  seqIdx = Math.max(seqIdx-1, 0);
+  updateProgress(); updateCursorDisplay(); highlightActive();
 }
-
 function jumpNext() { advanceCursor(1); }
-
 function jumpToSurface(side) {
-  const idx = sequence.findIndex(s => s.side === side);
-  if (idx !== -1) { seqIdx = idx; updateProgress(); updateCursorDisplay(); highlightActive(); }
+  const idx = sequence.findIndex(s=>s.side===side);
+  if(idx!==-1){seqIdx=idx; updateProgress(); updateCursorDisplay(); highlightActive();}
 }
-
 function jumpToArch(arch) {
-  const teeth = arch === 'upper' ? UPPER : LOWER;
-  const idx = sequence.findIndex(s => teeth.includes(s.tooth) && s.side === 'buccal');
-  if (idx !== -1) { seqIdx = idx; updateProgress(); updateCursorDisplay(); highlightActive(); }
+  const teeth = arch==='upper'?UPPER:LOWER;
+  const idx = sequence.findIndex(s=>teeth.includes(s.tooth)&&s.side==='buccal');
+  if(idx!==-1){seqIdx=idx; updateProgress(); updateCursorDisplay(); highlightActive();}
 }
-
 function jumpToTooth(tNum, side='buccal', pos=0) {
-  const idx = sequence.findIndex(s => s.tooth === tNum && s.side === side && s.pos === pos);
-  if (idx !== -1) { seqIdx = idx; updateProgress(); updateCursorDisplay(); highlightActive(); }
+  const idx = sequence.findIndex(s=>s.tooth===tNum&&s.side===side&&s.pos===pos);
+  if(idx!==-1){seqIdx=idx; updateProgress(); updateCursorDisplay(); highlightActive();}
 }
-
 function updateProgress() {
-  const pct = sequence.length ? Math.round((seqIdx / sequence.length) * 100) : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
-  const c = cur();
-  const pass = c && c.side === 'lingual' ? 'Lingual pass ←' : 'Buccal pass →';
-  document.getElementById('progressLabel').textContent = pass;
+  const pct = sequence.length?Math.round((seqIdx/sequence.length)*100):0;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+  const c=cur();
+  document.getElementById('progressLabel').textContent = c&&c.side==='lingual'?'Lingual pass ←':'Buccal pass →';
 }
-
 function updateCursorDisplay() {
-  const c = cur();
-  if (!c) { document.getElementById('cursorPos').textContent = 'Done'; return; }
-  const s = c.side === 'buccal' ? 'B' : 'L';
-  document.getElementById('cursorPos').textContent = `#${c.tooth} ${s}${c.pos+1}`;
+  const c=cur();
+  document.getElementById('cursorPos').textContent = c?`#${c.tooth} ${c.side==='buccal'?'B':'L'}${c.pos+1}`:'Done';
+}
+function getCursorLabel() {
+  const c=cur(); if(!c) return '—';
+  return `#${c.tooth} ${c.side==='buccal'?'B':'L'}${c.pos+1}`;
 }
 
-// ══════════════════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════════════════
 function buildArch(containerId, teeth, label) {
   const container = document.getElementById(containerId);
   container.innerHTML = `<div class="arch-title">${label}</div>`;
-
-  const bDiv = document.createElement('div');
-  bDiv.className = 'divider';
-  bDiv.innerHTML = '<span>Buccal / Facial</span><hr>';
-  container.appendChild(bDiv);
-
-  const row = document.createElement('div');
-  row.className = 'tooth-row';
-
-  teeth.forEach((tNum, idx) => {
-    const col = document.createElement('div');
-    col.className = 'tooth-col';
-    col.id = `col-${tNum}`;
-
-    // Buccal
-    const bg = document.createElement('div');
-    bg.className = 'pocket-group';
-    [0,1,2].forEach(p => {
-      const c = document.createElement('div');
-      c.className = 'pc'; c.id = `pc-${tNum}-buccal-${p}`; c.textContent = '—';
-      c.onclick = () => jumpToTooth(tNum, 'buccal', p);
-      bg.appendChild(c);
-    });
+  const bDiv = document.createElement('div'); bDiv.className='divider'; bDiv.innerHTML='<span>Buccal / Facial</span><hr>'; container.appendChild(bDiv);
+  const row = document.createElement('div'); row.className='tooth-row';
+  teeth.forEach(tNum => {
+    const col = document.createElement('div'); col.className='tooth-col'; col.id=`col-${tNum}`;
+    const bg = document.createElement('div'); bg.className='pocket-group';
+    [0,1,2].forEach(p => { const c=document.createElement('div'); c.className='pc'; c.id=`pc-${tNum}-buccal-${p}`; c.textContent='—'; c.onclick=()=>jumpToTooth(tNum,'buccal',p); bg.appendChild(c); });
     col.appendChild(bg);
-
-    // Furcation
-    const fr = document.createElement('div'); fr.className = 'furc-row';
-    [0,1,2].forEach(f => {
-      const fc = document.createElement('div');
-      fc.className = 'fc'; fc.id = `fc-${tNum}-${f}`;
-      fc.onclick = () => cycleFurc(tNum, f);
-      fr.appendChild(fc);
-    });
+    const fr = document.createElement('div'); fr.className='furc-row';
+    [0,1,2].forEach(f => { const fc=document.createElement('div'); fc.className='fc'; fc.id=`fc-${tNum}-${f}`; fc.onclick=()=>cycleFurc(tNum,f); fr.appendChild(fc); });
     col.appendChild(fr);
-
-    // Tooth number
-    const tn = document.createElement('div');
-    tn.className = 'tooth-num'; tn.id = `tn-${tNum}`; tn.textContent = tNum;
-    tn.onclick = () => jumpToTooth(tNum, 'buccal', 0);
-    col.appendChild(tn);
-
-    // Lingual
-    const lg = document.createElement('div');
-    lg.className = 'pocket-group';
-    [0,1,2].forEach(p => {
-      const c = document.createElement('div');
-      c.className = 'pc'; c.id = `pc-${tNum}-lingual-${p}`; c.textContent = '—';
-      c.onclick = () => jumpToTooth(tNum, 'lingual', p);
-      lg.appendChild(c);
-    });
+    const tn = document.createElement('div'); tn.className='tooth-num'; tn.id=`tn-${tNum}`; tn.textContent=tNum; tn.onclick=()=>jumpToTooth(tNum,'buccal',0); col.appendChild(tn);
+    const lg = document.createElement('div'); lg.className='pocket-group';
+    [0,1,2].forEach(p => { const c=document.createElement('div'); c.className='pc'; c.id=`pc-${tNum}-lingual-${p}`; c.textContent='—'; c.onclick=()=>jumpToTooth(tNum,'lingual',p); lg.appendChild(c); });
     col.appendChild(lg);
-
     row.appendChild(col);
   });
-
   container.appendChild(row);
-
-  const lDiv = document.createElement('div');
-  lDiv.className = 'divider';
-  lDiv.innerHTML = '<hr><span>Lingual / Palatal</span>';
-  container.appendChild(lDiv);
+  const lDiv = document.createElement('div'); lDiv.className='divider'; lDiv.innerHTML='<hr><span>Lingual / Palatal</span>'; container.appendChild(lDiv);
 }
 
 function renderCell(tNum, side, pos) {
-  const d = chart[tNum];
-  const el = document.getElementById(`pc-${tNum}-${side}-${pos}`);
-  if (!el) return;
-  const arr = side === 'buccal' ? d.buccal : d.lingual;
-  const bleed = side === 'buccal' ? d.bleedB : d.bleedL;
-  const supp = side === 'buccal' ? d.suppB : d.suppL;
-  const v = arr[pos];
-
-  el.className = 'pc';
-  el.textContent = v !== null ? v : '—';
-  if (v !== null) {
-    el.classList.add('has-val');
-    if (v >= 6) el.classList.add('d6plus');
-    else if (v >= 5) el.classList.add('d5');
-    else if (v >= 4) el.classList.add('d4');
-  }
-  if (supp[pos]) el.classList.add('supp');
-  else if (bleed[pos]) el.classList.add('bleed');
+  const d=chart[tNum], el=document.getElementById(`pc-${tNum}-${side}-${pos}`);
+  if(!el) return;
+  const arr=side==='buccal'?d.buccal:d.lingual, bleed=side==='buccal'?d.bleedB:d.bleedL, supp=side==='buccal'?d.suppB:d.suppL, v=arr[pos];
+  el.className='pc'; el.textContent=v!==null?v:'—';
+  if(v!==null){ el.classList.add('has-val'); if(v>=6) el.classList.add('d6plus'); else if(v>=5) el.classList.add('d5'); else if(v>=4) el.classList.add('d4'); }
+  if(supp[pos]) el.classList.add('supp'); else if(bleed[pos]) el.classList.add('bleed');
 }
 
 function renderTooth(tNum) {
-  const d = chart[tNum];
-  const tn = document.getElementById(`tn-${tNum}`);
-  if (!tn) return;
-  tn.className = 'tooth-num';
-  if (d.missing) tn.classList.add('missing');
-  if (d.implant) tn.classList.add('implant');
-  for (let p=0;p<3;p++) { renderCell(tNum,'buccal',p); renderCell(tNum,'lingual',p); }
-  [0,1,2].forEach(f => {
-    const fc = document.getElementById(`fc-${tNum}-${f}`);
-    if (!fc) return;
-    fc.className = 'fc';
-    if (d.furc[f]===1){fc.classList.add('f1');fc.textContent='F1';}
-    else if(d.furc[f]===2){fc.classList.add('f2');fc.textContent='F2';}
-    else if(d.furc[f]===3){fc.classList.add('f3');fc.textContent='F3';}
-    else fc.textContent='';
+  const d=chart[tNum], tn=document.getElementById(`tn-${tNum}`);
+  if(!tn) return;
+  tn.className='tooth-num';
+  if(d.missing) tn.classList.add('missing');
+  if(d.implant) tn.classList.add('implant');
+  for(let p=0;p<3;p++){renderCell(tNum,'buccal',p);renderCell(tNum,'lingual',p);}
+  [0,1,2].forEach(f=>{
+    const fc=document.getElementById(`fc-${tNum}-${f}`); if(!fc) return;
+    fc.className='fc';
+    if(d.furc[f]===1){fc.classList.add('f1');fc.textContent='F1';} else if(d.furc[f]===2){fc.classList.add('f2');fc.textContent='F2';} else if(d.furc[f]===3){fc.classList.add('f3');fc.textContent='F3';} else fc.textContent='';
   });
 }
 
 function highlightActive() {
-  document.querySelectorAll('.pc.active').forEach(e => e.classList.remove('active'));
-  document.querySelectorAll('.tooth-num.selected').forEach(e => e.classList.remove('selected'));
-  const c = cur();
-  if (!c) return;
-  const el = document.getElementById(`pc-${c.tooth}-${c.side}-${c.pos}`);
-  if (el) { el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); }
-  const tn = document.getElementById(`tn-${c.tooth}`);
-  if (tn) tn.classList.add('selected');
+  document.querySelectorAll('.pc.active').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tooth-num.selected').forEach(e=>e.classList.remove('selected'));
+  const c=cur(); if(!c) return;
+  const el=document.getElementById(`pc-${c.tooth}-${c.side}-${c.pos}`);
+  if(el){el.classList.add('active');el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}
+  const tn=document.getElementById(`tn-${c.tooth}`); if(tn) tn.classList.add('selected');
 }
 
-function cycleFurc(tNum, f) {
-  chart[tNum].furc[f] = (chart[tNum].furc[f]+1)%4;
-  renderTooth(tNum);
-}
+function cycleFurc(tNum, f) { chart[tNum].furc[f]=(chart[tNum].furc[f]+1)%4; renderTooth(tNum); }
 
-// ══════════════════════════════════════════════════════
-// VOICE
-// ══════════════════════════════════════════════════════
+// ── VOICE + NUM PARSING ──
 const NUM_MAP = {
-  'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,
-  'six':6,'seven':7,'eight':8,'nine':9,'ten':10,
-  'oh':0,'to':2,'too':2,'for':4,'ate':8,'free':3,'tree':3,
-  'eleven':11,'twelve':12
+  'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9,'ten':10,'eleven':11,'twelve':12,
+  'oh':0,'a':1,'to':2,'too':2,'tu':2,'for':4,'fore':4,'foe':4,'ate':8,'free':3,'tree':3,'sex':6,'sick':6,'nein':9,'won':1,'fi':5,'sic':6
 };
-
 function wordsToNums(str) {
-  return str.split(/\s+/).map(w=>{
-    const n=parseInt(w); if(!isNaN(n)) return n;
-    return NUM_MAP[w]!==undefined?NUM_MAP[w]:null;
-  }).filter(x=>x!==null);
+  const results=[];
+  for(const w of str.split(/[\s,]+/)){
+    const n=parseInt(w); if(!isNaN(n)&&n>=0&&n<=12){results.push(n);continue;}
+    if(NUM_MAP[w]!==undefined) results.push(NUM_MAP[w]);
+  }
+  return results;
 }
-
-let recognition=null, listening=false;
-let setupRecognition=null, setupListening=false;
+function has(text,...terms){return terms.some(t=>text.includes(t));}
 
 function setupVoice() {
-  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
-  if (!SR) { document.getElementById('noSupport').style.display='block'; document.getElementById('micBtn').disabled=true; return; }
-
-  recognition = new SR();
-  recognition.continuous=true; recognition.interimResults=true; recognition.lang='en-US';
-  recognition.onresult = e => {
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById('noSupport').style.display='block';document.getElementById('micBtn').disabled=true;return;}
+  recognition=new SR(); recognition.continuous=true; recognition.interimResults=true; recognition.lang='en-US';
+  recognition.onresult=e=>{
     let interim='',final='';
-    for(let i=e.resultIndex;i<e.results.length;i++){
-      if(e.results[i].isFinal) final+=e.results[i][0].transcript;
-      else interim+=e.results[i][0].transcript;
-    }
+    for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)final+=e.results[i][0].transcript;else interim+=e.results[i][0].transcript;}
     document.getElementById('transcript').textContent=(interim||final||'—');
     if(final) processVoice(final.trim().toLowerCase());
   };
-  recognition.onerror=e=>log('Error: '+e.error,true);
-  recognition.onend=()=>{ if(listening) recognition.start(); };
+  recognition.onerror=e=>{if(e.error==='no-speech')return;log('Mic error: '+e.error,true);};
+  recognition.onend=()=>{if(listening){try{recognition.start();}catch(e){}}};
 
-  // Setup mic for missing teeth
-  setupRecognition = new SR();
-  setupRecognition.continuous=false; setupRecognition.interimResults=false; setupRecognition.lang='en-US';
-  setupRecognition.onresult=e=>{
-    const txt=e.results[0][0].transcript;
-    document.getElementById('missingInput').value=txt;
-    parseMissingText();
-    setupListening=false;
-    document.getElementById('setupMicBtn').textContent='🎤 Say teeth';
-  };
+  setupRecognition=new SR(); setupRecognition.continuous=false; setupRecognition.interimResults=false; setupRecognition.lang='en-US';
+  setupRecognition.onresult=e=>{document.getElementById('missingInput').value=e.results[0][0].transcript;parseMissingText();setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};
   setupRecognition.onerror=()=>{setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};
+
+  const kb=document.getElementById('kbInput');
+  kb.addEventListener('keydown',e=>{if(e.key==='Enter'){const v=kb.value.trim();if(v){processVoice(v.toLowerCase());kb.value='';}}});
 }
 
 function toggleMic() {
   if(!recognition) return;
   listening=!listening;
-  const btn=document.getElementById('micBtn');
-  const st=document.getElementById('micStatus');
+  const btn=document.getElementById('micBtn'), st=document.getElementById('micStatus');
   if(listening){
-    recognition.start();
+    try{recognition.start();}catch(e){}
     btn.classList.add('listening'); btn.textContent='🔴';
-    st.textContent='Listening…'; st.className='mic-status active';
-    log('Voice charting active');
+    st.innerHTML=waitingForStart?'Say <strong style="color:#0d1117">"start charting"</strong> to begin':'Listening — say numbers or commands';
+    st.className='mic-status active'; log('Mic on');
   } else {
-    recognition.stop();
-    btn.classList.remove('listening'); btn.textContent='🎤';
-    st.textContent='Click mic to start voice charting'; st.className='mic-status';
-    document.getElementById('transcript').textContent='—';
-    log('Paused');
+    recognition.stop(); btn.classList.remove('listening'); btn.textContent='🎤';
+    st.innerHTML='Say <strong style="color:var(--accent)">"start charting"</strong> or click mic';
+    st.className='mic-status'; document.getElementById('transcript').textContent='—'; log('Paused');
   }
 }
 
 function toggleSetupMic() {
-  if(!setupRecognition) {
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    if(!SR){alert('Speech not supported. Use Chrome.');return;}
-    setupRecognition=new SR();
-    setupRecognition.continuous=false; setupRecognition.interimResults=false; setupRecognition.lang='en-US';
-    setupRecognition.onresult=e=>{
-      document.getElementById('missingInput').value=e.results[0][0].transcript;
-      parseMissingText();
-      setupListening=false;
-      document.getElementById('setupMicBtn').textContent='🎤 Say teeth';
-    };
-    setupRecognition.onerror=()=>{setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};
-  }
-  if(!setupListening){
-    setupListening=true;
-    document.getElementById('setupMicBtn').textContent='🔴 Listening…';
-    setupRecognition.start();
-  }
+  if(!setupRecognition){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){alert('Use Chrome.');return;}setupRecognition=new SR();setupRecognition.continuous=false;setupRecognition.interimResults=false;setupRecognition.lang='en-US';setupRecognition.onresult=e=>{document.getElementById('missingInput').value=e.results[0][0].transcript;parseMissingText();setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};setupRecognition.onerror=()=>{setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};}
+  if(!setupListening){setupListening=true;document.getElementById('setupMicBtn').textContent='🔴 Listening…';try{setupRecognition.start();}catch(e){}}
 }
 
-function log(msg,isErr=false){
-  const el=document.getElementById('cmdLog');
-  el.textContent=msg; el.className=isErr?'error':'';
-}
+function log(msg,isErr=false){const el=document.getElementById('cmdLog');el.textContent=msg;el.className=isErr?'error':'';}
 
-// ══════════════════════════════════════════════════════
-// VOICE COMMAND PROCESSOR
-// ══════════════════════════════════════════════════════
 function processVoice(raw) {
-  const text = raw.replace(/[.,!?]/g,'').trim();
+  const text=raw.replace(/[.,!?]/g,'').trim().toLowerCase();
   log('Heard: "'+text+'"');
 
-  // Jump to specific tooth
-  const toothMatch = text.match(/(?:tooth|number|num)\s*(\d+)/);
-  if (toothMatch) {
-    const t=parseInt(toothMatch[1]);
-    if(ALL_TEETH.includes(t)&&!chart[t].missing){
-      jumpToTooth(t,'buccal',0); log('Jumped to #'+t); return;
+  // Wake word
+  if(has(text,'start chart','begin chart','start peri','begin peri','start','begin','chart','go')){
+    if(waitingForStart){
+      waitingForStart=false;
+      document.getElementById('micStatus').textContent='Charting — say numbers or commands';
+      log('✓ Charting started!'); return;
     }
   }
+  if(waitingForStart && listening){log('Say "start charting" to begin',true);return;}
 
-  // Missing toggle
-  if (text.includes('missing')) {
-    const c=cur(); chart[c.tooth].missing=!chart[c.tooth].missing;
-    renderTooth(c.tooth); buildSequence();
-    log('Tooth #'+c.tooth+' '+(chart[c.tooth].missing?'missing':'present'));
-    return;
-  }
-
-  // Implant
-  if (text.includes('implant')) {
-    const c=cur(); chart[c.tooth].implant=!chart[c.tooth].implant;
-    renderTooth(c.tooth); log('Implant toggled #'+c.tooth); return;
-  }
-
+  // Go back
+  if(has(text,'go back','back','undo','oops','ope','wrong','mistake','repeat')){jumpPrev();log('← Back to '+getCursorLabel());return;}
+  // Next
+  if(has(text,'next tooth')){jumpToTooth(nextToothFrom(cur().tooth),'buccal',0);log('Next tooth');return;}
+  if(has(text,'next','skip','forward')){advanceCursor(1);log('→ '+getCursorLabel());return;}
+  // Jump to tooth
+  const toothMatch=text.match(/(?:tooth|number|num|go to)[\s#]*(\d{1,2})/);
+  if(toothMatch){const t=parseInt(toothMatch[1]);if(ALL_TEETH.includes(t)&&!chart[t].missing){jumpToTooth(t,'buccal',0);log('→ #'+t);return;}}
+  // Surface / arch
+  if(has(text,'buccal','facial','buckle','bukal')){jumpToSurface('buccal');log('Buccal pass');return;}
+  if(has(text,'lingual','palatal','lingua')){jumpToSurface('lingual');log('Lingual pass');return;}
+  if(has(text,'upper','maxilla')){jumpToArch('upper');log('Upper arch');return;}
+  if(has(text,'lower','mandib')){jumpToArch('lower');log('Lower arch');return;}
+  // Missing / implant
+  if(has(text,'missing','absent')){const c=cur();chart[c.tooth].missing=!chart[c.tooth].missing;renderTooth(c.tooth);buildSequence();log('Tooth #'+c.tooth+' '+(chart[c.tooth].missing?'missing':'present'));return;}
+  if(has(text,'implant','impl')){const c=cur();chart[c.tooth].implant=!chart[c.tooth].implant;renderTooth(c.tooth);log('Implant toggled #'+c.tooth);return;}
   // Furcation
-  const furcM=text.match(/furc(?:ation)?\s*([123]|one|two|three)/);
-  if(furcM){
-    const c=cur();
-    const fv=parseInt(furcM[1])||NUM_MAP[furcM[1]]||1;
-    chart[c.tooth].furc=[fv,fv,fv]; renderTooth(c.tooth);
-    log('Furcation '+fv+' on #'+c.tooth); return;
-  }
-
+  const furcM=text.match(/(?:furc|ferk|firk|fork)\w*\s*([123]|one|two|three)/);
+  if(furcM){const c=cur();const fv=parseInt(furcM[1])||NUM_MAP[furcM[1]]||1;chart[c.tooth].furc=[fv,fv,fv];renderTooth(c.tooth);log('Furcation '+fv+' #'+c.tooth);return;}
   // Bleeding
-  if(text.match(/bleed(?:ing)?|bled/)){
-    const c=cur();
-    const arr=c.side==='buccal'?chart[c.tooth].bleedB:chart[c.tooth].bleedL;
-    arr[c.pos]=!arr[c.pos]; renderCell(c.tooth,c.side,c.pos);
-    log('Bleeding toggled #'+c.tooth+' '+c.side); return;
-  }
-
+  if(has(text,'bleed','bled','blood','bleat','breed')){const c=cur();const arr=c.side==='buccal'?chart[c.tooth].bleedB:chart[c.tooth].bleedL;arr[c.pos]=!arr[c.pos];renderCell(c.tooth,c.side,c.pos);log('Bleeding #'+c.tooth);return;}
   // Suppuration
-  if(text.match(/supp(?:uration)?|purulence|pus/)){
-    const c=cur();
-    const arr=c.side==='buccal'?chart[c.tooth].suppB:chart[c.tooth].suppL;
-    arr[c.pos]=!arr[c.pos]; renderCell(c.tooth,c.side,c.pos);
-    log('Suppuration toggled #'+c.tooth); return;
-  }
+  if(has(text,'supp','pus','purul','exudate','drain')){const c=cur();const arr=c.side==='buccal'?chart[c.tooth].suppB:chart[c.tooth].suppL;arr[c.pos]=!arr[c.pos];renderCell(c.tooth,c.side,c.pos);log('Suppuration #'+c.tooth);return;}
 
-  // Navigation
-  if(text.match(/next tooth/)){jumpToTooth(nextToothFrom(cur().tooth),'buccal',0);return;}
-  if(text.match(/prev(?:ious)? tooth|back tooth/)){jumpToTooth(prevToothFrom(cur().tooth),'buccal',0);return;}
-  if(text.match(/buccal|facial|buckle/)){jumpToSurface('buccal');return;}
-  if(text.match(/lingual|palatal/)){jumpToSurface('lingual');return;}
-  if(text.match(/upper|maxillary/)){jumpToArch('upper');return;}
-  if(text.match(/lower|mandibular/)){jumpToArch('lower');return;}
-  if(text.match(/^(?:next|skip)$/)){advanceCursor(1);return;}
-
-  // ── NUMBER ENTRY (core feature) ──
-  // Handle strings like "3 2 3" or "three two three" or single "4"
-  const nums = wordsToNums(text);
-  if(nums.length>0 && nums.every(n=>n>=0&&n<=12)){
-    const c=cur();
-    const side=c.side;
-    const arr=side==='buccal'?chart[c.tooth].buccal:chart[c.tooth].lingual;
-
-    // Fill from current position, up to 3 numbers or remaining cells in tooth
+  // Numbers
+  const nums=wordsToNums(text);
+  if(nums.length>0&&nums.length<=9){
+    const c=cur(),side=c.side,arr=side==='buccal'?chart[c.tooth].buccal:chart[c.tooth].lingual;
     let filled=0;
-    for(let i=0;i<nums.length&&i<3;i++){
-      const pos=c.pos+i;
-      if(pos>=3) break;
-      arr[pos]=nums[i];
-      renderCell(c.tooth,side,pos);
-      filled++;
-    }
-    log(`#${c.tooth} ${side}: ${nums.slice(0,filled).join(' ')}`);
-    if(autoAdvance) advanceCursor(filled);
-    return;
+    for(let i=0;i<nums.length;i++){const pos=c.pos+i;if(pos>=3)break;arr[pos]=nums[i];renderCell(c.tooth,side,pos);filled++;}
+    if(filled>0){log(`#${c.tooth} ${side}: ${nums.slice(0,filled).join(' ')}`);if(autoAdvance)advanceCursor(filled);return;}
   }
-
-  log('Not recognized: "'+text+'"',true);
+  log('? "'+text+'" not recognized',true);
 }
 
-function nextToothFrom(tNum){
-  const arr=UPPER.includes(tNum)?UPPER:LOWER;
-  const i=arr.indexOf(tNum);
-  return arr[Math.min(i+1,arr.length-1)];
-}
-function prevToothFrom(tNum){
-  const arr=UPPER.includes(tNum)?UPPER:LOWER;
-  const i=arr.indexOf(tNum);
-  return arr[Math.max(i-1,0)];
-}
+function nextToothFrom(tNum){const arr=UPPER.includes(tNum)?UPPER:LOWER;return arr[Math.min(arr.indexOf(tNum)+1,arr.length-1)];}
+function prevToothFrom(tNum){const arr=UPPER.includes(tNum)?UPPER:LOWER;return arr[Math.max(arr.indexOf(tNum)-1,0)];}
 
-// ══════════════════════════════════════════════════════
-// AUTO-ADVANCE TOGGLE
-// ══════════════════════════════════════════════════════
-function toggleAutoAdvance(){
-  autoAdvance=!autoAdvance;
-  const btn=document.getElementById('aaBtn');
-  btn.textContent=autoAdvance?'▶ Auto-advance ON':'▶ Auto-advance OFF';
-  btn.style.borderColor=autoAdvance?'var(--accent)':'';
-  btn.style.color=autoAdvance?'var(--accent)':'';
-}
+function toggleAutoAdvance(){autoAdvance=!autoAdvance;const btn=document.getElementById('aaBtn');btn.textContent=autoAdvance?'▶ Auto-advance ON':'▶ Auto-advance OFF';btn.style.borderColor=autoAdvance?'var(--accent)':'';btn.style.color=autoAdvance?'var(--accent)':'';}
 
-// ══════════════════════════════════════════════════════
-// SETUP SCREEN LOGIC
-// ══════════════════════════════════════════════════════
 function buildMissingGrid(containerId, teeth) {
-  const el=document.getElementById(containerId);
-  el.innerHTML='';
-  teeth.forEach(t=>{
-    const btn=document.createElement('button');
-    btn.className='missing-btn'; btn.textContent=t; btn.id='mb-'+t;
-    btn.onclick=()=>{
-      chart[t].missing=!chart[t].missing;
-      btn.classList.toggle('marked',chart[t].missing);
-    };
-    el.appendChild(btn);
-  });
+  const el=document.getElementById(containerId); el.innerHTML='';
+  teeth.forEach(t=>{const btn=document.createElement('button');btn.className='missing-btn';btn.textContent=t;btn.id='mb-'+t;btn.onclick=()=>{chart[t].missing=!chart[t].missing;btn.classList.toggle('marked',chart[t].missing);};el.appendChild(btn);});
 }
 
 function parseMissingText(){
-  const val=document.getElementById('missingInput').value;
-  const nums=val.match(/\d+/g);
+  const val=document.getElementById('missingInput').value, nums=val.match(/\d+/g);
   if(!nums) return;
-  // Reset all first
-  ALL_TEETH.forEach(t=>{ chart[t].missing=false; const b=document.getElementById('mb-'+t); if(b) b.classList.remove('marked'); });
-  nums.forEach(n=>{
-    const t=parseInt(n);
-    if(ALL_TEETH.includes(t)){
-      chart[t].missing=true;
-      const b=document.getElementById('mb-'+t); if(b) b.classList.add('marked');
-    }
-  });
+  ALL_TEETH.forEach(t=>{chart[t].missing=false;const b=document.getElementById('mb-'+t);if(b)b.classList.remove('marked');});
+  nums.forEach(n=>{const t=parseInt(n);if(ALL_TEETH.includes(t)){chart[t].missing=true;const b=document.getElementById('mb-'+t);if(b)b.classList.add('marked');}});
 }
 
 function startCharting(){
   patientName=document.getElementById('setupName').value||'Unknown Patient';
   visitDate=document.getElementById('setupDate').value||new Date().toLocaleDateString('en-US');
   provider=document.getElementById('setupProvider').value||'';
-
-  // Apply missing from grid state (already set via clicks)
-  buildSequence();
-  seqIdx=0;
-
-  // Render chart
+  buildSequence(); seqIdx=0;
   ALL_TEETH.forEach(renderTooth);
-
-  // Update header
-  document.getElementById('ptInfo').textContent=
-    patientName+(provider?' — '+provider:'')+' | '+visitDate;
-
-  // Switch phases
+  document.getElementById('ptInfo').textContent=patientName+(provider?' — '+provider:'')+' | '+visitDate;
   document.getElementById('setupPhase').classList.remove('active');
   document.getElementById('chartPhase').classList.add('active');
-
-  updateProgress();
-  updateCursorDisplay();
-  highlightActive();
+  waitingForStart=true;
+  updateProgress(); updateCursorDisplay(); highlightActive();
   setupVoice();
 }
 
-// ══════════════════════════════════════════════════════
-// SAVE PDF & NEW CHART
-// ══════════════════════════════════════════════════════
-function saveAndExport(){
-  // Add patient name to title for print
-  document.title='Perio Chart — '+patientName+' — '+visitDate;
-  window.print();
-}
+function saveAndExport(){document.title='Perio Chart — '+patientName+' — '+visitDate;window.print();}
 
 function newChart(){
-  if(!confirm('Save PDF first? Click OK to start a new blank chart (current data will be cleared).')) return;
-  // Stop mic
-  if(listening){ listening=false; if(recognition) recognition.stop(); }
-  // Reset
-  initChart();
+  if(!confirm('Start a new blank chart? Current data will be cleared.')) return;
+  if(listening){listening=false;if(recognition)recognition.stop();}
+  waitingForStart=true; initChart();
   document.getElementById('chartPhase').classList.remove('active');
   document.getElementById('setupPhase').classList.add('active');
   document.getElementById('setupName').value='';
@@ -858,21 +576,17 @@ function newChart(){
   document.getElementById('missingInput').value='';
   document.getElementById('clinicalNotes').value='';
   document.getElementById('setupDate').value=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
-  buildMissingGrid('missingUpper',UPPER);
-  buildMissingGrid('missingLower',LOWER);
-  // Rebuild arch DOM (reset cells)
-  buildArch('upperArch', UPPER, '▲ Maxillary (Upper) — #1–16');
-  buildArch('lowerArch', LOWER, '▼ Mandibular (Lower) — #17–32');
+  buildMissingGrid('missingUpper',UPPER); buildMissingGrid('missingLower',LOWER);
+  buildArch('upperArch',UPPER,'▲ Maxillary (Upper) — #1–16');
+  buildArch('lowerArch',LOWER,'▼ Mandibular (Lower) — #17–32');
   ALL_TEETH.forEach(renderTooth);
 }
 
-// ══════════════════════════════════════════════════════
 // INIT
-// ══════════════════════════════════════════════════════
-buildArch('upperArch', UPPER, '▲ Maxillary (Upper) — #1–16');
-buildArch('lowerArch', LOWER, '▼ Mandibular (Lower) — #17–32');
-buildMissingGrid('missingUpper', UPPER);
-buildMissingGrid('missingLower', LOWER);
+buildArch('upperArch',UPPER,'▲ Maxillary (Upper) — #1–16');
+buildArch('lowerArch',LOWER,'▼ Mandibular (Lower) — #17–32');
+buildMissingGrid('missingUpper',UPPER);
+buildMissingGrid('missingLower',LOWER);
 document.getElementById('setupDate').value=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
 </script>
 </body>
