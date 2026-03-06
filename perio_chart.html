@@ -6,947 +6,874 @@
 <title>Perio Chart</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #1c2330;
-    --border: #30363d;
-    --text: #e6edf3;
-    --text-muted: #7d8590;
-    --accent: #2dd4bf;
-    --accent2: #f59e0b;
-    --red: #f87171;
-    --green: #4ade80;
-    --blue: #60a5fa;
-    --purple: #c084fc;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    min-height: 100vh;
-    padding: 16px;
-  }
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2330;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --accent: #2dd4bf;
+  --amber: #f59e0b;
+  --red: #f87171;
+  --green: #4ade80;
+  --blue: #60a5fa;
+  --purple: #c084fc;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh;padding:14px;}
 
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  header h1 {
-    font-family: 'DM Mono', monospace;
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .patient-fields {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-  .patient-fields input {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 5px 10px;
-    border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    width: 160px;
-  }
-  .patient-fields input::placeholder { color: var(--text-muted); }
-  .patient-fields input:focus { outline: none; border-color: var(--accent); }
+/* ── PHASES ── */
+#setupPhase, #chartPhase { display: none; }
+#setupPhase.active, #chartPhase.active { display: block; }
 
-  /* MIC BUTTON */
-  .mic-zone {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 18px;
-    margin-bottom: 18px;
-  }
-  #micBtn {
-    width: 46px; height: 46px;
-    border-radius: 50%;
-    border: none;
-    background: var(--surface2);
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 20px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-    border: 2px solid var(--border);
-  }
-  #micBtn.listening {
-    background: var(--accent);
-    color: #0d1117;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 6px rgba(45,212,191,0.15);
-    animation: pulse 1.2s infinite;
-  }
-  @keyframes pulse {
-    0%,100% { box-shadow: 0 0 0 4px rgba(45,212,191,0.15); }
-    50% { box-shadow: 0 0 0 10px rgba(45,212,191,0.05); }
-  }
-  .mic-info { flex: 1; }
-  .mic-status {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 3px;
-  }
-  .mic-status.active { color: var(--accent); }
-  #transcript {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--text);
-    min-height: 16px;
-    font-style: italic;
-    color: var(--text-muted);
-  }
-  .mic-hint {
-    font-size: 11px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-  .mic-hint strong { color: var(--accent2); }
+/* ── SETUP SCREEN ── */
+.setup-card {
+  max-width: 640px; margin: 60px auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+}
+.setup-card h2 {
+  font-family: 'DM Mono', monospace;
+  font-size: 18px; color: var(--accent);
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em;
+}
+.setup-card p { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+.setup-field { margin-bottom: 18px; }
+.setup-field label { display: block; font-size: 11px; font-family:'DM Mono',monospace; color: var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
+.setup-field input, .setup-field select {
+  width: 100%; background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); padding: 9px 12px; border-radius: 8px;
+  font-family:'DM Sans',sans-serif; font-size:13px;
+}
+.setup-field input:focus, .setup-field select:focus { outline:none; border-color: var(--accent); }
 
-  /* LEGEND */
-  .legend {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-  }
-  .legend-item {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 11px; color: var(--text-muted);
-  }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-red { background: var(--red); }
-  .dot-blue { background: var(--blue); }
-  .dot-green { background: var(--green); }
-  .dot-yellow { background: var(--accent2); }
+.missing-grid {
+  display: grid; grid-template-columns: repeat(16, 1fr); gap: 4px; margin-top: 8px;
+}
+.missing-btn {
+  aspect-ratio: 1; border-radius: 5px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--muted);
+  font-family:'DM Mono',monospace; font-size: 10px; cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: all .15s;
+}
+.missing-btn:hover { border-color: var(--red); color: var(--red); }
+.missing-btn.marked { background: rgba(248,113,113,.15); border-color: var(--red); color: var(--red); text-decoration: line-through; }
 
-  /* ARCH WRAPPER */
-  .arch-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 14px;
-  }
-  .arch-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-  }
+.missing-voice-row {
+  display: flex; gap: 8px; align-items: center; margin-top: 10px;
+}
+.missing-voice-row input {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text); padding: 8px 12px; border-radius: 8px;
+  font-family:'DM Mono',monospace; font-size:13px;
+}
+.missing-voice-row input:focus { outline:none; border-color:var(--accent); }
 
-  /* TOOTH ROW */
-  .tooth-row {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .tooth-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 58px;
-  }
+.arch-row { display:flex; gap:4px; margin-bottom:6px; }
+.arch-label-s { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); width:48px; display:flex; align-items:center; }
 
-  /* POCKET DEPTH CELLS */
-  .pocket-group {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    width: 100%;
-    margin: 2px 0;
-  }
-  .pocket-cell {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    text-align: center;
-    padding: 3px 1px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    min-height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    position: relative;
-  }
-  .pocket-cell:hover { border-color: var(--accent); }
-  .pocket-cell.active { border-color: var(--accent); background: rgba(45,212,191,0.1); color: var(--accent); }
-  .pocket-cell[data-val] { color: var(--text); }
-  .pocket-cell.depth-4 { color: var(--accent2); }
-  .pocket-cell.depth-5 { color: var(--red); }
-  .pocket-cell.depth-6, .pocket-cell.depth-7, .pocket-cell.depth-8,
-  .pocket-cell.depth-9, .pocket-cell.depth-10 { color: var(--red); background: rgba(248,113,113,0.1); }
-  .pocket-cell.bleed { border-bottom: 3px solid var(--red); }
-  .pocket-cell.suppuration { border-bottom: 3px solid var(--purple); }
+.start-btn {
+  width:100%; padding:14px; margin-top:24px;
+  background: var(--accent); color:#0d1117;
+  border:none; border-radius:10px; font-size:15px; font-weight:700;
+  font-family:'DM Sans',sans-serif; cursor:pointer; letter-spacing:.02em;
+  transition: opacity .15s;
+}
+.start-btn:hover { opacity:.85; }
 
-  /* TOOTH NUMBER */
-  .tooth-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text-muted);
-    background: var(--surface2);
-    border-radius: 4px;
-    padding: 2px 4px;
-    margin: 3px 0;
-    width: 100%;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s;
-    border: 1px solid transparent;
-  }
-  .tooth-num:hover { border-color: var(--border); color: var(--text); }
-  .tooth-num.selected { background: var(--accent); color: #0d1117; border-color: var(--accent); font-weight: 600; }
-  .tooth-num.missing { opacity: 0.3; text-decoration: line-through; }
-  .tooth-num.implant { border-color: var(--blue); color: var(--blue); }
+/* ── CHART HEADER ── */
+header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--border);
+  flex-wrap:wrap; gap:8px;
+}
+.header-left h1 { font-family:'DM Mono',monospace; font-size:15px; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; }
+.header-left .pt-info { font-size:12px; color:var(--muted); margin-top:2px; }
+.header-right { display:flex; gap:8px; flex-wrap:wrap; }
 
-  /* FURCATION / FLAGS */
-  .flags-row {
-    display: flex;
-    gap: 2px;
-    width: 100%;
-    margin: 2px 0;
-  }
-  .flag-cell {
-    flex: 1;
-    height: 14px;
-    border-radius: 3px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    font-size: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    transition: all 0.15s;
-  }
-  .flag-cell.furc1 { background: rgba(245,158,11,0.3); border-color: var(--accent2); color: var(--accent2); }
-  .flag-cell.furc2 { background: rgba(248,113,113,0.3); border-color: var(--red); color: var(--red); }
-  .flag-cell.furc3 { background: rgba(248,113,113,0.6); border-color: var(--red); color: var(--red); }
+/* ── MIC ZONE ── */
+.mic-zone {
+  display:flex; align-items:center; gap:12px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:10px 14px; margin-bottom:14px;
+}
+#micBtn {
+  width:44px; height:44px; border-radius:50%; border:2px solid var(--border);
+  background:var(--surface2); color:var(--muted); cursor:pointer;
+  font-size:18px; display:flex; align-items:center; justify-content:center;
+  transition:all .2s; flex-shrink:0;
+}
+#micBtn.listening {
+  background:var(--accent); color:#0d1117; border-color:var(--accent);
+  animation:pulse 1.2s infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(45,212,191,.15);}50%{box-shadow:0 0 0 10px rgba(45,212,191,.04);}}
+.mic-info { flex:1; min-width:0; }
+.mic-status { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); margin-bottom:2px; }
+.mic-status.active { color:var(--accent); }
+#transcript { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); font-style:italic; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#cmdLog { font-family:'DM Mono',monospace; font-size:11px; padding:4px 10px; background:var(--surface2); border:1px solid var(--border); border-radius:5px; color:var(--green); flex-shrink:0; max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#cmdLog.error { color:var(--red); }
+#cursorPos { font-family:'DM Mono',monospace; font-size:12px; padding:5px 10px; background:var(--surface2); border:1px solid var(--border); border-radius:6px; color:var(--accent); flex-shrink:0; white-space:nowrap; }
 
-  /* ROW LABELS */
-  .row-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-bottom: 2px;
-    margin-top: 4px;
-  }
+/* ── CONTROLS ── */
+.controls { display:flex; gap:7px; margin-bottom:14px; flex-wrap:wrap; }
+.btn { padding:6px 13px; border-radius:7px; border:1px solid var(--border); background:var(--surface2); color:var(--text); font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.btn:hover { border-color:var(--accent); color:var(--accent); }
+.btn.danger:hover { border-color:var(--red); color:var(--red); }
+.btn.primary { background:var(--accent); color:#0d1117; border-color:var(--accent); font-weight:600; }
+.btn.primary:hover { opacity:.85; }
+.btn.amber { background:var(--amber); color:#0d1117; border-color:var(--amber); font-weight:600; }
+.btn.amber:hover { opacity:.85; }
 
-  /* SIDE LABEL in tooth-col */
-  .side-label {
-    font-size: 9px;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.05em;
-  }
+/* ── PROGRESS BAR ── */
+.progress-wrap { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 12px; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+.progress-label { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+.progress-bar { flex:1; height:6px; background:var(--surface2); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--accent); border-radius:3px; transition:width .3s; }
+.progress-pct { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); width:36px; text-align:right; }
 
-  /* CURRENT POSITION INDICATOR */
-  #currentPos {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 6px 12px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--accent);
-    flex-shrink: 0;
-  }
+/* ── ARCH ── */
+.arch-section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:12px; overflow-x:auto; }
+.arch-title { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; }
+.tooth-row { display:flex; gap:3px; min-width:max-content; }
+.tooth-col { display:flex; flex-direction:column; align-items:center; width:56px; }
 
-  /* CONTROLS */
-  .controls {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .btn {
-    padding: 6px 14px;
-    border-radius: 7px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn.danger:hover { border-color: var(--red); color: var(--red); }
-  .btn.primary { background: var(--accent); color: #0d1117; border-color: var(--accent); font-weight: 600; }
-  .btn.primary:hover { opacity: 0.85; }
+.pocket-group { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; width:100%; margin:2px 0; }
+.pc {
+  background:var(--surface2); border:1px solid var(--border); border-radius:4px;
+  text-align:center; padding:3px 1px; font-family:'DM Mono',monospace; font-size:12px;
+  font-weight:500; cursor:pointer; min-height:24px; display:flex; align-items:center;
+  justify-content:center; color:var(--muted); transition:all .12s;
+}
+.pc:hover { border-color:var(--accent); }
+.pc.active { border-color:var(--accent)!important; background:rgba(45,212,191,.12); color:var(--accent); box-shadow:0 0 0 2px rgba(45,212,191,.2); }
+.pc.has-val { color:var(--text); }
+.pc.d4 { color:var(--amber); }
+.pc.d5 { color:var(--red); }
+.pc.d6plus { color:var(--red); background:rgba(248,113,113,.08); }
+.pc.bleed { border-bottom:3px solid var(--red)!important; }
+.pc.supp { border-bottom:3px solid var(--purple)!important; }
 
-  /* NOTES */
-  .notes-area {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    margin-top: 14px;
-  }
-  .notes-area label {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-family: 'DM Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    display: block;
-    margin-bottom: 8px;
-  }
-  .notes-area textarea {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    resize: vertical;
-    min-height: 60px;
-  }
-  .notes-area textarea:focus { outline: none; border-color: var(--accent); }
+.tooth-num {
+  font-family:'DM Mono',monospace; font-size:11px; color:var(--muted);
+  background:var(--surface2); border-radius:4px; padding:2px 4px; margin:3px 0;
+  width:100%; text-align:center; cursor:pointer; transition:all .15s;
+  border:1px solid transparent;
+}
+.tooth-num:hover { border-color:var(--border); color:var(--text); }
+.tooth-num.selected { background:var(--accent); color:#0d1117; border-color:var(--accent); font-weight:700; }
+.tooth-num.missing { opacity:.25; text-decoration:line-through; pointer-events:none; }
+.tooth-num.implant { border-color:var(--blue); color:var(--blue); }
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { height: 4px; width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.furc-row { display:flex; gap:2px; width:100%; margin:2px 0; }
+.fc { flex:1; height:13px; border-radius:3px; background:var(--surface2); border:1px solid var(--border); cursor:pointer; font-size:8px; display:flex; align-items:center; justify-content:center; color:var(--muted); transition:all .12s; }
+.fc.f1 { background:rgba(245,158,11,.25); border-color:var(--amber); color:var(--amber); }
+.fc.f2 { background:rgba(248,113,113,.25); border-color:var(--red); color:var(--red); }
+.fc.f3 { background:rgba(248,113,113,.5); border-color:var(--red); color:var(--red); }
 
-  /* VOICE COMMAND LOG */
-  #cmdLog {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--green);
-    min-height: 14px;
-    padding: 4px 10px;
-    background: var(--surface2);
-    border-radius: 5px;
-    border: 1px solid var(--border);
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  #cmdLog.error { color: var(--red); }
+.divider { display:flex; align-items:center; gap:6px; margin:5px 0; }
+.divider span { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+.divider hr { flex:1; border:none; border-top:1px solid var(--border); }
 
-  /* NO SUPPORT */
-  #noSupport {
-    display: none;
-    background: rgba(248,113,113,0.1);
-    border: 1px solid var(--red);
-    color: var(--red);
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    margin-bottom: 12px;
-  }
+/* ── LEGEND ── */
+.legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+.li { display:flex; align-items:center; gap:4px; font-size:11px; color:var(--muted); }
+.dot { width:9px; height:9px; border-radius:50%; }
 
-  .section-divider {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 6px 0 8px;
-  }
-  .section-divider span {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    white-space: nowrap;
-  }
-  .section-divider hr {
-    flex: 1;
-    border: none;
-    border-top: 1px solid var(--border);
-  }
+/* ── NOTES ── */
+.notes-area { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:12px; }
+.notes-area label { font-size:11px; color:var(--muted); font-family:'DM Mono',monospace; text-transform:uppercase; letter-spacing:.07em; display:block; margin-bottom:6px; }
+.notes-area textarea { width:100%; background:var(--surface2); border:1px solid var(--border); color:var(--text); border-radius:6px; padding:8px 10px; font-family:'DM Sans',sans-serif; font-size:12px; resize:vertical; min-height:55px; }
+.notes-area textarea:focus { outline:none; border-color:var(--accent); }
+
+/* ── NO SUPPORT ── */
+#noSupport { display:none; background:rgba(248,113,113,.1); border:1px solid var(--red); color:var(--red); padding:10px 14px; border-radius:8px; font-size:12px; margin-bottom:12px; }
+
+/* ── PRINT ── */
+@media print {
+  body { background:#fff; color:#000; padding:8px; font-size:11px; }
+  #setupPhase { display:none!important; }
+  .mic-zone, .controls, .progress-wrap, .legend, #noSupport, .notes-area { display:none!important; }
+  .arch-section { background:#fff; border:1px solid #ccc; page-break-inside:avoid; }
+  .pc { background:#f9f9f9; border-color:#ccc; color:#000; font-size:10px; min-height:20px; }
+  .pc.active { background:#f9f9f9!important; box-shadow:none!important; }
+  .tooth-num { background:#eee; color:#000; }
+  .tooth-num.selected { background:#eee!important; color:#000!important; }
+  header { border-bottom:1px solid #ccc; }
+  .btn, .header-right { display:none!important; }
+  .arch-title { color:#333; }
+  .divider span { color:#666; }
+  .divider hr { border-color:#ccc; }
+  .pc.d4 { color:#b45309; }
+  .pc.d5, .pc.d6plus { color:#b91c1c; }
+  .pc.bleed { border-bottom:3px solid #dc2626!important; }
+  .pc.supp { border-bottom:3px solid #9333ea!important; }
+  .fc.f1 { background:#fef3c7; border-color:#d97706; color:#92400e; }
+  .fc.f2, .fc.f3 { background:#fee2e2; border-color:#dc2626; color:#991b1b; }
+  @page { margin: 0.5in; size: landscape; }
+}
+
+::-webkit-scrollbar{height:4px;width:4px;}
+::-webkit-scrollbar-track{background:var(--surface);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>⬡ Perio Chart</h1>
-  <div class="patient-fields">
-    <input type="text" id="patientName" placeholder="Patient name" />
-    <input type="text" id="visitDate" placeholder="Date" />
-    <input type="text" id="provider" placeholder="Provider" />
+<!-- ═══════════════════════════════════════════
+     PHASE 1 — SETUP
+═══════════════════════════════════════════ -->
+<div id="setupPhase" class="active">
+  <div class="setup-card">
+    <h2>⬡ New Perio Chart</h2>
+    <p>Enter patient info and mark any missing teeth before charting begins.</p>
+
+    <div class="setup-field">
+      <label>Patient Name</label>
+      <input type="text" id="setupName" placeholder="First Last" />
+    </div>
+    <div style="display:flex;gap:12px;">
+      <div class="setup-field" style="flex:1">
+        <label>Date</label>
+        <input type="text" id="setupDate" />
+      </div>
+      <div class="setup-field" style="flex:1">
+        <label>Provider</label>
+        <input type="text" id="setupProvider" placeholder="Dr. Name" />
+      </div>
+    </div>
+
+    <div class="setup-field">
+      <label>Missing Teeth — click to mark, or use voice below</label>
+      <div class="arch-row">
+        <div class="arch-label-s">Upper</div>
+        <div class="missing-grid" id="missingUpper"></div>
+      </div>
+      <div class="arch-row" style="margin-top:6px;">
+        <div class="arch-label-s">Lower</div>
+        <div class="missing-grid" id="missingLower"></div>
+      </div>
+    </div>
+
+    <div class="setup-field">
+      <label>Or type / say missing teeth (e.g. "1, 16, 17, 32")</label>
+      <div class="missing-voice-row">
+        <input type="text" id="missingInput" placeholder="e.g. 1 16 17 32" />
+        <button class="btn" onclick="parseMissingText()">Apply</button>
+        <button class="btn" id="setupMicBtn" onclick="toggleSetupMic()">🎤 Say teeth</button>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startCharting()">Start Charting →</button>
   </div>
-</header>
+</div>
 
-<div id="noSupport">⚠ Speech recognition not supported in this browser. Use Chrome or Edge for voice charting.</div>
+<!-- ═══════════════════════════════════════════
+     PHASE 2 — CHARTING
+═══════════════════════════════════════════ -->
+<div id="chartPhase">
+  <div id="noSupport">⚠ Speech recognition not supported. Use Chrome or Edge.</div>
 
-<div class="mic-zone">
-  <button id="micBtn" title="Click to start/stop voice charting">🎤</button>
-  <div class="mic-info">
-    <div class="mic-status" id="micStatus">Click mic to start voice charting</div>
-    <div id="transcript">—</div>
+  <header>
+    <div class="header-left">
+      <h1>⬡ Perio Chart</h1>
+      <div class="pt-info" id="ptInfo">—</div>
+    </div>
+    <div class="header-right">
+      <button class="btn" onclick="toggleAutoAdvance()" id="aaBtn">▶ Auto-advance ON</button>
+      <button class="btn" onclick="jumpPrev()">← Back</button>
+      <button class="btn" onclick="jumpNext()">→ Next</button>
+      <button class="btn amber" onclick="saveAndExport()">⬇ Save PDF</button>
+      <button class="btn danger" onclick="newChart()">✕ New Chart</button>
+    </div>
+  </header>
+
+  <div class="mic-zone">
+    <button id="micBtn" onclick="toggleMic()">🎤</button>
+    <div class="mic-info">
+      <div class="mic-status" id="micStatus">Click mic to start voice charting</div>
+      <div id="transcript">—</div>
+    </div>
+    <div id="cmdLog">Ready</div>
+    <div id="cursorPos">—</div>
   </div>
-  <div id="cmdLog">Ready</div>
-  <div id="currentPos">—</div>
-</div>
 
-<div class="controls">
-  <button class="btn" onclick="autoAdvance = !autoAdvance; this.textContent = autoAdvance ? '▶ Auto-advance ON' : '▶ Auto-advance OFF'; this.style.borderColor = autoAdvance ? 'var(--accent)' : ''">▶ Auto-advance ON</button>
-  <button class="btn" onclick="jumpNext()">→ Next Cell</button>
-  <button class="btn" onclick="jumpPrev()">← Prev Cell</button>
-  <button class="btn danger" onclick="clearAll()">✕ Clear All</button>
-  <button class="btn primary" onclick="printChart()">⬡ Print</button>
-</div>
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel">Buccal pass</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-pct" id="progressPct">0%</div>
+  </div>
 
-<div class="legend">
-  <div class="legend-item"><div class="dot dot-red"></div> Bleeding</div>
-  <div class="legend-item"><div class="dot" style="background:var(--purple)"></div> Suppuration</div>
-  <div class="legend-item"><div class="dot dot-yellow"></div> 4mm pocket</div>
-  <div class="legend-item"><div class="dot dot-red" style="opacity:0.7"></div> 5mm+ pocket</div>
-  <div class="legend-item"><div class="dot" style="background:var(--blue)"></div> Implant</div>
-  <span style="font-size:11px;color:var(--text-muted)">|</span>
-  <span style="font-size:11px;color:var(--text-muted)">Voice: say depth numbers (e.g. "3 2 3"), "bleed", "suppuration", "furcation 1/2/3", "missing", "implant", "next tooth", "upper/lower"</span>
-</div>
+  <div class="controls">
+    <button class="btn" onclick="jumpToSurface('buccal')">Buccal Pass</button>
+    <button class="btn" onclick="jumpToSurface('lingual')">Lingual Pass</button>
+    <button class="btn" onclick="jumpToArch('upper')">Upper Arch</button>
+    <button class="btn" onclick="jumpToArch('lower')">Lower Arch</button>
+  </div>
 
-<div id="upperArch" class="arch-section"></div>
-<div id="lowerArch" class="arch-section"></div>
+  <div class="legend">
+    <div class="li"><div class="dot" style="background:var(--red)"></div>Bleeding</div>
+    <div class="li"><div class="dot" style="background:var(--purple)"></div>Suppuration</div>
+    <div class="li"><div class="dot" style="background:var(--amber)"></div>4mm</div>
+    <div class="li"><div class="dot" style="background:var(--red);opacity:.6"></div>5mm+</div>
+    <div class="li"><div class="dot" style="background:var(--blue)"></div>Implant</div>
+    <span style="color:var(--muted);font-size:11px;">| Say: numbers, "bleed", "suppress", "furcation 2", "missing", "implant", "next", "buccal", "lingual"</span>
+  </div>
 
-<div class="notes-area">
-  <label>Clinical Notes</label>
-  <textarea id="clinicalNotes" placeholder="Voice or type notes here..."></textarea>
+  <div id="upperArch" class="arch-section"></div>
+  <div id="lowerArch" class="arch-section"></div>
+
+  <div class="notes-area">
+    <label>Clinical Notes</label>
+    <textarea id="clinicalNotes" placeholder="Type or dictate notes..."></textarea>
+  </div>
 </div>
 
 <script>
-// ——— DATA MODEL ———
-const UPPER_TEETH = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
-const LOWER_TEETH = [32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17];
+// ══════════════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════════════
+const UPPER = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+const LOWER = [32,31,30,29,28,27,26,25,24,23,22,21,20,19,18,17];
+const ALL_TEETH = [...UPPER, ...LOWER];
 
-// Each tooth: { buccal: [d,d,d], lingual: [d,d,d], bleedB: [b,b,b], bleedL: [b,b,b], suppB, suppL, furc: [0,0,0], missing, implant }
-const chart = {};
-[...UPPER_TEETH, ...LOWER_TEETH].forEach(t => {
-  chart[t] = {
-    buccal:  [null,null,null],
-    lingual: [null,null,null],
-    bleedB:  [false,false,false],
-    bleedL:  [false,false,false],
-    suppB:   [false,false,false],
-    suppL:   [false,false,false],
-    furc:    [0,0,0],
-    missing: false,
-    implant: false
-  };
-});
+// Traversal order:
+// Phase A: ALL buccal surfaces left to right (upper #1→16, then lower #32→17)
+// Phase B: ALL lingual surfaces right to left (lower #17→32, then upper #16→1)
+// Within each tooth: 3 cells (distal, mid, mesial for buccal; mesial, mid, distal for lingual)
 
-// ——— CURSOR ———
-let cursor = { arch: 'upper', toothIdx: 0, side: 'buccal', pos: 0 };
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+let chart = {};
+let patientName = '', visitDate = '', provider = '';
 let autoAdvance = true;
 
-function getCursorTooth() {
-  const arr = cursor.arch === 'upper' ? UPPER_TEETH : LOWER_TEETH;
-  return arr[cursor.toothIdx];
+function initChart() {
+  chart = {};
+  ALL_TEETH.forEach(t => {
+    chart[t] = {
+      buccal:  [null,null,null],
+      lingual: [null,null,null],
+      bleedB:  [false,false,false],
+      bleedL:  [false,false,false],
+      suppB:   [false,false,false],
+      suppL:   [false,false,false],
+      furc:    [0,0,0],
+      missing: false,
+      implant: false
+    };
+  });
+}
+initChart();
+
+// ══════════════════════════════════════════════════════
+// TRAVERSAL SEQUENCE
+// Build flat list of {tooth, side, pos} skipping missing
+// ══════════════════════════════════════════════════════
+// Buccal: upper L→R then lower L→R (as displayed)
+// Lingual: lower R→L then upper R→L (return sweep)
+const BUCCAL_ORDER = [...UPPER, ...LOWER]; // 1..16, 32..17
+const LINGUAL_ORDER = [...LOWER].reverse().concat([...UPPER].reverse()); // 17..32, 16..1
+
+let sequence = [];
+let seqIdx = 0;
+
+function buildSequence() {
+  sequence = [];
+  BUCCAL_ORDER.forEach(t => {
+    if (chart[t].missing) return;
+    [0,1,2].forEach(p => sequence.push({tooth:t, side:'buccal', pos:p}));
+  });
+  LINGUAL_ORDER.forEach(t => {
+    if (chart[t].missing) return;
+    [0,1,2].forEach(p => sequence.push({tooth:t, side:'lingual', pos:p}));
+  });
 }
 
-function getCursorLabel() {
-  const t = getCursorTooth();
-  const s = cursor.side === 'buccal' ? 'B' : 'L';
-  const p = cursor.pos + 1;
-  return `#${t} ${s}${p}`;
-}
+function cur() { return sequence[seqIdx] || sequence[sequence.length-1]; }
 
-function advanceCursor() {
-  cursor.pos++;
-  if (cursor.pos >= 3) {
-    cursor.pos = 0;
-    if (cursor.side === 'buccal') {
-      cursor.side = 'lingual';
-    } else {
-      cursor.side = 'buccal';
-      const arr = cursor.arch === 'upper' ? UPPER_TEETH : LOWER_TEETH;
-      cursor.toothIdx++;
-      if (cursor.toothIdx >= arr.length) {
-        if (cursor.arch === 'upper') {
-          cursor.arch = 'lower';
-          cursor.toothIdx = 0;
-        } else {
-          cursor.toothIdx = arr.length - 1;
-        }
-      }
-    }
-  }
+function advanceCursor(steps=1) {
+  seqIdx = Math.min(seqIdx + steps, sequence.length - 1);
+  updateProgress();
   updateCursorDisplay();
   highlightActive();
-}
-
-function jumpNext() {
-  advanceCursor();
 }
 
 function jumpPrev() {
-  cursor.pos--;
-  if (cursor.pos < 0) {
-    cursor.pos = 2;
-    if (cursor.side === 'lingual') {
-      cursor.side = 'buccal';
-    } else {
-      cursor.side = 'lingual';
-      cursor.toothIdx--;
-      if (cursor.toothIdx < 0) {
-        if (cursor.arch === 'lower') {
-          cursor.arch = 'upper';
-          cursor.toothIdx = UPPER_TEETH.length - 1;
-        } else {
-          cursor.toothIdx = 0;
-        }
-      }
-    }
-  }
+  seqIdx = Math.max(seqIdx - 1, 0);
+  updateProgress();
   updateCursorDisplay();
   highlightActive();
 }
 
-function updateCursorDisplay() {
-  document.getElementById('currentPos').textContent = getCursorLabel();
+function jumpNext() { advanceCursor(1); }
+
+function jumpToSurface(side) {
+  const idx = sequence.findIndex(s => s.side === side);
+  if (idx !== -1) { seqIdx = idx; updateProgress(); updateCursorDisplay(); highlightActive(); }
 }
 
-// ——— RENDER ———
-function buildArch(archId, teeth, label) {
-  const container = document.getElementById(archId);
-  container.innerHTML = `<div class="arch-label">${label}</div>`;
+function jumpToArch(arch) {
+  const teeth = arch === 'upper' ? UPPER : LOWER;
+  const idx = sequence.findIndex(s => teeth.includes(s.tooth) && s.side === 'buccal');
+  if (idx !== -1) { seqIdx = idx; updateProgress(); updateCursorDisplay(); highlightActive(); }
+}
 
-  // Buccal row label
-  const bRow = document.createElement('div');
-  bRow.className = 'section-divider';
-  bRow.innerHTML = '<span>Buccal / Facial</span><hr>';
-  container.appendChild(bRow);
+function jumpToTooth(tNum, side='buccal', pos=0) {
+  const idx = sequence.findIndex(s => s.tooth === tNum && s.side === side && s.pos === pos);
+  if (idx !== -1) { seqIdx = idx; updateProgress(); updateCursorDisplay(); highlightActive(); }
+}
 
-  const toothRow = document.createElement('div');
-  toothRow.className = 'tooth-row';
+function updateProgress() {
+  const pct = sequence.length ? Math.round((seqIdx / sequence.length) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  const c = cur();
+  const pass = c && c.side === 'lingual' ? 'Lingual pass ←' : 'Buccal pass →';
+  document.getElementById('progressLabel').textContent = pass;
+}
+
+function updateCursorDisplay() {
+  const c = cur();
+  if (!c) { document.getElementById('cursorPos').textContent = 'Done'; return; }
+  const s = c.side === 'buccal' ? 'B' : 'L';
+  document.getElementById('cursorPos').textContent = `#${c.tooth} ${s}${c.pos+1}`;
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════
+function buildArch(containerId, teeth, label) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = `<div class="arch-title">${label}</div>`;
+
+  const bDiv = document.createElement('div');
+  bDiv.className = 'divider';
+  bDiv.innerHTML = '<span>Buccal / Facial</span><hr>';
+  container.appendChild(bDiv);
+
+  const row = document.createElement('div');
+  row.className = 'tooth-row';
 
   teeth.forEach((tNum, idx) => {
     const col = document.createElement('div');
     col.className = 'tooth-col';
     col.id = `col-${tNum}`;
 
-    // Buccal pockets
-    const bGroup = document.createElement('div');
-    bGroup.className = 'pocket-group';
+    // Buccal
+    const bg = document.createElement('div');
+    bg.className = 'pocket-group';
     [0,1,2].forEach(p => {
-      const cell = document.createElement('div');
-      cell.className = 'pocket-cell';
-      cell.id = `cell-${tNum}-buccal-${p}`;
-      cell.textContent = '—';
-      cell.addEventListener('click', () => {
-        cursor.arch = archId === 'upperArch' ? 'upper' : 'lower';
-        cursor.toothIdx = idx;
-        cursor.side = 'buccal';
-        cursor.pos = p;
-        updateCursorDisplay();
-        highlightActive();
-      });
-      bGroup.appendChild(cell);
+      const c = document.createElement('div');
+      c.className = 'pc'; c.id = `pc-${tNum}-buccal-${p}`; c.textContent = '—';
+      c.onclick = () => jumpToTooth(tNum, 'buccal', p);
+      bg.appendChild(c);
     });
-    col.appendChild(bGroup);
+    col.appendChild(bg);
 
     // Furcation
-    const furcRow = document.createElement('div');
-    furcRow.className = 'flags-row';
+    const fr = document.createElement('div'); fr.className = 'furc-row';
     [0,1,2].forEach(f => {
       const fc = document.createElement('div');
-      fc.className = 'flag-cell';
-      fc.id = `furc-${tNum}-${f}`;
-      fc.title = `Furcation ${f+1}`;
-      fc.addEventListener('click', () => cycleFurc(tNum, f));
-      furcRow.appendChild(fc);
+      fc.className = 'fc'; fc.id = `fc-${tNum}-${f}`;
+      fc.onclick = () => cycleFurc(tNum, f);
+      fr.appendChild(fc);
     });
-    col.appendChild(furcRow);
+    col.appendChild(fr);
 
     // Tooth number
     const tn = document.createElement('div');
-    tn.className = 'tooth-num';
-    tn.id = `tooth-${tNum}`;
-    tn.textContent = tNum;
-    tn.addEventListener('click', () => {
-      cursor.arch = archId === 'upperArch' ? 'upper' : 'lower';
-      cursor.toothIdx = idx;
-      cursor.side = 'buccal';
-      cursor.pos = 0;
-      updateCursorDisplay();
-      highlightActive();
-    });
+    tn.className = 'tooth-num'; tn.id = `tn-${tNum}`; tn.textContent = tNum;
+    tn.onclick = () => jumpToTooth(tNum, 'buccal', 0);
     col.appendChild(tn);
 
-    // Lingual pockets
-    const lGroup = document.createElement('div');
-    lGroup.className = 'pocket-group';
+    // Lingual
+    const lg = document.createElement('div');
+    lg.className = 'pocket-group';
     [0,1,2].forEach(p => {
-      const cell = document.createElement('div');
-      cell.className = 'pocket-cell';
-      cell.id = `cell-${tNum}-lingual-${p}`;
-      cell.textContent = '—';
-      cell.addEventListener('click', () => {
-        cursor.arch = archId === 'upperArch' ? 'upper' : 'lower';
-        cursor.toothIdx = idx;
-        cursor.side = 'lingual';
-        cursor.pos = p;
-        updateCursorDisplay();
-        highlightActive();
-      });
-      lGroup.appendChild(cell);
+      const c = document.createElement('div');
+      c.className = 'pc'; c.id = `pc-${tNum}-lingual-${p}`; c.textContent = '—';
+      c.onclick = () => jumpToTooth(tNum, 'lingual', p);
+      lg.appendChild(c);
     });
-    col.appendChild(lGroup);
+    col.appendChild(lg);
 
-    toothRow.appendChild(col);
+    row.appendChild(col);
   });
 
-  const lRow = document.createElement('div');
-  lRow.className = 'section-divider';
-  lRow.innerHTML = '<hr><span>Lingual / Palatal</span>';
-  container.appendChild(toothRow);
-  container.appendChild(lRow);
+  container.appendChild(row);
+
+  const lDiv = document.createElement('div');
+  lDiv.className = 'divider';
+  lDiv.innerHTML = '<hr><span>Lingual / Palatal</span>';
+  container.appendChild(lDiv);
 }
 
 function renderCell(tNum, side, pos) {
   const d = chart[tNum];
-  const cell = document.getElementById(`cell-${tNum}-${side}-${pos}`);
-  if (!cell) return;
+  const el = document.getElementById(`pc-${tNum}-${side}-${pos}`);
+  if (!el) return;
   const arr = side === 'buccal' ? d.buccal : d.lingual;
   const bleed = side === 'buccal' ? d.bleedB : d.bleedL;
   const supp = side === 'buccal' ? d.suppB : d.suppL;
-  const val = arr[pos];
+  const v = arr[pos];
 
-  cell.className = 'pocket-cell';
-  cell.textContent = val !== null ? val : '—';
-  if (val !== null) {
-    cell.setAttribute('data-val', val);
-    if (val >= 6) cell.classList.add('depth-6');
-    else if (val >= 5) cell.classList.add('depth-5');
-    else if (val >= 4) cell.classList.add('depth-4');
-  } else {
-    cell.removeAttribute('data-val');
+  el.className = 'pc';
+  el.textContent = v !== null ? v : '—';
+  if (v !== null) {
+    el.classList.add('has-val');
+    if (v >= 6) el.classList.add('d6plus');
+    else if (v >= 5) el.classList.add('d5');
+    else if (v >= 4) el.classList.add('d4');
   }
-  if (supp[pos]) cell.classList.add('suppuration');
-  else if (bleed[pos]) cell.classList.add('bleed');
+  if (supp[pos]) el.classList.add('supp');
+  else if (bleed[pos]) el.classList.add('bleed');
 }
 
 function renderTooth(tNum) {
   const d = chart[tNum];
-  const tn = document.getElementById(`tooth-${tNum}`);
+  const tn = document.getElementById(`tn-${tNum}`);
   if (!tn) return;
   tn.className = 'tooth-num';
   if (d.missing) tn.classList.add('missing');
   if (d.implant) tn.classList.add('implant');
-
-  for (let p = 0; p < 3; p++) {
-    renderCell(tNum, 'buccal', p);
-    renderCell(tNum, 'lingual', p);
-  }
-
-  // Furcation
-  const furcStates = d.furc;
+  for (let p=0;p<3;p++) { renderCell(tNum,'buccal',p); renderCell(tNum,'lingual',p); }
   [0,1,2].forEach(f => {
-    const fc = document.getElementById(`furc-${tNum}-${f}`);
+    const fc = document.getElementById(`fc-${tNum}-${f}`);
     if (!fc) return;
-    fc.className = 'flag-cell';
-    if (furcStates[f] === 1) { fc.classList.add('furc1'); fc.textContent = 'F1'; }
-    else if (furcStates[f] === 2) { fc.classList.add('furc2'); fc.textContent = 'F2'; }
-    else if (furcStates[f] === 3) { fc.classList.add('furc3'); fc.textContent = 'F3'; }
-    else fc.textContent = '';
+    fc.className = 'fc';
+    if (d.furc[f]===1){fc.classList.add('f1');fc.textContent='F1';}
+    else if(d.furc[f]===2){fc.classList.add('f2');fc.textContent='F2';}
+    else if(d.furc[f]===3){fc.classList.add('f3');fc.textContent='F3';}
+    else fc.textContent='';
   });
 }
 
 function highlightActive() {
-  document.querySelectorAll('.pocket-cell.active').forEach(c => c.classList.remove('active'));
-  document.querySelectorAll('.tooth-num.selected').forEach(c => c.classList.remove('selected'));
-  const tNum = getCursorTooth();
-  const cell = document.getElementById(`cell-${tNum}-${cursor.side}-${cursor.pos}`);
-  if (cell) cell.classList.add('active');
-  const tn = document.getElementById(`tooth-${tNum}`);
+  document.querySelectorAll('.pc.active').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.tooth-num.selected').forEach(e => e.classList.remove('selected'));
+  const c = cur();
+  if (!c) return;
+  const el = document.getElementById(`pc-${c.tooth}-${c.side}-${c.pos}`);
+  if (el) { el.classList.add('active'); el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); }
+  const tn = document.getElementById(`tn-${c.tooth}`);
   if (tn) tn.classList.add('selected');
-  // Scroll into view
-  cell && cell.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
 
-function cycleFurc(tNum, idx) {
-  const d = chart[tNum];
-  d.furc[idx] = (d.furc[idx] + 1) % 4;
+function cycleFurc(tNum, f) {
+  chart[tNum].furc[f] = (chart[tNum].furc[f]+1)%4;
   renderTooth(tNum);
 }
 
-// ——— VOICE ———
-let recognition = null;
-let listening = false;
+// ══════════════════════════════════════════════════════
+// VOICE
+// ══════════════════════════════════════════════════════
+const NUM_MAP = {
+  'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,
+  'six':6,'seven':7,'eight':8,'nine':9,'ten':10,
+  'oh':0,'to':2,'too':2,'for':4,'ate':8,'free':3,'tree':3,
+  'eleven':11,'twelve':12
+};
+
+function wordsToNums(str) {
+  return str.split(/\s+/).map(w=>{
+    const n=parseInt(w); if(!isNaN(n)) return n;
+    return NUM_MAP[w]!==undefined?NUM_MAP[w]:null;
+  }).filter(x=>x!==null);
+}
+
+let recognition=null, listening=false;
+let setupRecognition=null, setupListening=false;
 
 function setupVoice() {
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) {
-    document.getElementById('noSupport').style.display = 'block';
-    document.getElementById('micBtn').disabled = true;
-    return;
-  }
-  recognition = new SpeechRec();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'en-US';
+  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  if (!SR) { document.getElementById('noSupport').style.display='block'; document.getElementById('micBtn').disabled=true; return; }
 
-  recognition.onresult = (e) => {
-    let interim = '';
-    let final = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) final += e.results[i][0].transcript;
-      else interim += e.results[i][0].transcript;
+  recognition = new SR();
+  recognition.continuous=true; recognition.interimResults=true; recognition.lang='en-US';
+  recognition.onresult = e => {
+    let interim='',final='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal) final+=e.results[i][0].transcript;
+      else interim+=e.results[i][0].transcript;
     }
-    document.getElementById('transcript').textContent = interim || final || '—';
-    if (final) processVoice(final.trim().toLowerCase());
+    document.getElementById('transcript').textContent=(interim||final||'—');
+    if(final) processVoice(final.trim().toLowerCase());
   };
+  recognition.onerror=e=>log('Error: '+e.error,true);
+  recognition.onend=()=>{ if(listening) recognition.start(); };
 
-  recognition.onerror = (e) => {
-    log('Voice error: ' + e.error, true);
+  // Setup mic for missing teeth
+  setupRecognition = new SR();
+  setupRecognition.continuous=false; setupRecognition.interimResults=false; setupRecognition.lang='en-US';
+  setupRecognition.onresult=e=>{
+    const txt=e.results[0][0].transcript;
+    document.getElementById('missingInput').value=txt;
+    parseMissingText();
+    setupListening=false;
+    document.getElementById('setupMicBtn').textContent='🎤 Say teeth';
   };
-
-  recognition.onend = () => {
-    if (listening) recognition.start(); // restart if still active
-  };
+  setupRecognition.onerror=()=>{setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};
 }
 
 function toggleMic() {
-  if (!recognition) return;
-  listening = !listening;
-  const btn = document.getElementById('micBtn');
-  const status = document.getElementById('micStatus');
-  if (listening) {
+  if(!recognition) return;
+  listening=!listening;
+  const btn=document.getElementById('micBtn');
+  const st=document.getElementById('micStatus');
+  if(listening){
     recognition.start();
-    btn.classList.add('listening');
-    btn.textContent = '🔴';
-    status.textContent = 'Listening…';
-    status.className = 'mic-status active';
+    btn.classList.add('listening'); btn.textContent='🔴';
+    st.textContent='Listening…'; st.className='mic-status active';
     log('Voice charting active');
   } else {
     recognition.stop();
-    btn.classList.remove('listening');
-    btn.textContent = '🎤';
-    status.textContent = 'Click mic to start voice charting';
-    status.className = 'mic-status';
-    document.getElementById('transcript').textContent = '—';
+    btn.classList.remove('listening'); btn.textContent='🎤';
+    st.textContent='Click mic to start voice charting'; st.className='mic-status';
+    document.getElementById('transcript').textContent='—';
     log('Paused');
   }
 }
 
-function log(msg, isError = false) {
-  const el = document.getElementById('cmdLog');
-  el.textContent = msg;
-  el.className = isError ? 'error' : '';
+function toggleSetupMic() {
+  if(!setupRecognition) {
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){alert('Speech not supported. Use Chrome.');return;}
+    setupRecognition=new SR();
+    setupRecognition.continuous=false; setupRecognition.interimResults=false; setupRecognition.lang='en-US';
+    setupRecognition.onresult=e=>{
+      document.getElementById('missingInput').value=e.results[0][0].transcript;
+      parseMissingText();
+      setupListening=false;
+      document.getElementById('setupMicBtn').textContent='🎤 Say teeth';
+    };
+    setupRecognition.onerror=()=>{setupListening=false;document.getElementById('setupMicBtn').textContent='🎤 Say teeth';};
+  }
+  if(!setupListening){
+    setupListening=true;
+    document.getElementById('setupMicBtn').textContent='🔴 Listening…';
+    setupRecognition.start();
+  }
 }
 
-// ——— VOICE COMMAND PARSER ———
-const NUM_WORDS = {
-  'zero':0,'one':1,'two':2,'three':3,'four':4,'five':5,
-  'six':6,'seven':7,'eight':8,'nine':9,'ten':10,
-  'oh':0,'to':2,'too':2,'for':4,'ate':8,'nein':9
-};
-
-function wordsToDigits(str) {
-  return str.split(/\s+/).map(w => {
-    const n = parseInt(w);
-    if (!isNaN(n)) return n;
-    return NUM_WORDS[w] !== undefined ? NUM_WORDS[w] : null;
-  }).filter(x => x !== null);
+function log(msg,isErr=false){
+  const el=document.getElementById('cmdLog');
+  el.textContent=msg; el.className=isErr?'error':'';
 }
 
+// ══════════════════════════════════════════════════════
+// VOICE COMMAND PROCESSOR
+// ══════════════════════════════════════════════════════
 function processVoice(raw) {
-  const text = raw.toLowerCase().replace(/[.,!?]/g, '').trim();
-  log('Heard: "' + text + '"');
+  const text = raw.replace(/[.,!?]/g,'').trim();
+  log('Heard: "'+text+'"');
 
-  // Jump to tooth: "tooth 14" or "number 14"
+  // Jump to specific tooth
   const toothMatch = text.match(/(?:tooth|number|num)\s*(\d+)/);
   if (toothMatch) {
-    const t = parseInt(toothMatch[1]);
-    const uIdx = UPPER_TEETH.indexOf(t);
-    const lIdx = LOWER_TEETH.indexOf(t);
-    if (uIdx !== -1) {
-      cursor.arch = 'upper'; cursor.toothIdx = uIdx; cursor.side = 'buccal'; cursor.pos = 0;
-      log(`Jumped to tooth #${t}`);
-      updateCursorDisplay(); highlightActive(); return;
-    } else if (lIdx !== -1) {
-      cursor.arch = 'lower'; cursor.toothIdx = lIdx; cursor.side = 'buccal'; cursor.pos = 0;
-      log(`Jumped to tooth #${t}`);
-      updateCursorDisplay(); highlightActive(); return;
+    const t=parseInt(toothMatch[1]);
+    if(ALL_TEETH.includes(t)&&!chart[t].missing){
+      jumpToTooth(t,'buccal',0); log('Jumped to #'+t); return;
     }
   }
 
-  // Missing
+  // Missing toggle
   if (text.includes('missing')) {
-    const t = getCursorTooth();
-    chart[t].missing = !chart[t].missing;
-    renderTooth(t);
-    log(`Tooth #${t} marked ${chart[t].missing ? 'missing' : 'present'}`);
+    const c=cur(); chart[c.tooth].missing=!chart[c.tooth].missing;
+    renderTooth(c.tooth); buildSequence();
+    log('Tooth #'+c.tooth+' '+(chart[c.tooth].missing?'missing':'present'));
     return;
   }
 
   // Implant
   if (text.includes('implant')) {
-    const t = getCursorTooth();
-    chart[t].implant = !chart[t].implant;
-    renderTooth(t);
-    log(`Tooth #${t} marked ${chart[t].implant ? 'implant' : 'natural'}`);
-    return;
+    const c=cur(); chart[c.tooth].implant=!chart[c.tooth].implant;
+    renderTooth(c.tooth); log('Implant toggled #'+c.tooth); return;
   }
 
   // Furcation
-  const furcMatch = text.match(/furc(?:ation)?\s*([123one two three])/);
-  if (furcMatch) {
-    const t = getCursorTooth();
-    const fv = parseInt(furcMatch[1]) || NUM_WORDS[furcMatch[1]] || 1;
-    chart[t].furc = [fv, fv, fv];
-    renderTooth(t);
-    log(`Furcation ${fv} on tooth #${t}`);
-    return;
+  const furcM=text.match(/furc(?:ation)?\s*([123]|one|two|three)/);
+  if(furcM){
+    const c=cur();
+    const fv=parseInt(furcM[1])||NUM_MAP[furcM[1]]||1;
+    chart[c.tooth].furc=[fv,fv,fv]; renderTooth(c.tooth);
+    log('Furcation '+fv+' on #'+c.tooth); return;
   }
 
   // Bleeding
-  if (text.includes('bleed') || text.includes('bleeding') || text.includes('bled')) {
-    const t = getCursorTooth();
-    const side = cursor.side;
-    const arr = side === 'buccal' ? chart[t].bleedB : chart[t].bleedL;
-    arr[cursor.pos] = !arr[cursor.pos];
-    renderCell(t, side, cursor.pos);
-    log(`Bleeding toggled: #${t} ${side} pos ${cursor.pos+1}`);
-    return;
+  if(text.match(/bleed(?:ing)?|bled/)){
+    const c=cur();
+    const arr=c.side==='buccal'?chart[c.tooth].bleedB:chart[c.tooth].bleedL;
+    arr[c.pos]=!arr[c.pos]; renderCell(c.tooth,c.side,c.pos);
+    log('Bleeding toggled #'+c.tooth+' '+c.side); return;
   }
 
   // Suppuration
-  if (text.includes('supp') || text.includes('purulence') || text.includes('pus')) {
-    const t = getCursorTooth();
-    const side = cursor.side;
-    const arr = side === 'buccal' ? chart[t].suppB : chart[t].suppL;
-    arr[cursor.pos] = !arr[cursor.pos];
-    renderCell(t, side, cursor.pos);
-    log(`Suppuration toggled: #${t} ${side} pos ${cursor.pos+1}`);
-    return;
+  if(text.match(/supp(?:uration)?|purulence|pus/)){
+    const c=cur();
+    const arr=c.side==='buccal'?chart[c.tooth].suppB:chart[c.tooth].suppL;
+    arr[c.pos]=!arr[c.pos]; renderCell(c.tooth,c.side,c.pos);
+    log('Suppuration toggled #'+c.tooth); return;
   }
 
   // Navigation
-  if (text.includes('next tooth')) {
-    const arr = cursor.arch === 'upper' ? UPPER_TEETH : LOWER_TEETH;
-    cursor.toothIdx = Math.min(cursor.toothIdx + 1, arr.length - 1);
-    cursor.side = 'buccal'; cursor.pos = 0;
-    updateCursorDisplay(); highlightActive();
-    log(`Next tooth: #${getCursorTooth()}`);
-    return;
-  }
-  if (text.includes('prev tooth') || text.includes('previous tooth') || text.includes('back')) {
-    cursor.toothIdx = Math.max(cursor.toothIdx - 1, 0);
-    cursor.side = 'buccal'; cursor.pos = 0;
-    updateCursorDisplay(); highlightActive();
-    log(`Prev tooth: #${getCursorTooth()}`);
-    return;
-  }
-  if (text.includes('buccal') || text.includes('facial') || text.includes('buckle')) {
-    cursor.side = 'buccal'; cursor.pos = 0;
-    updateCursorDisplay(); highlightActive();
-    log('Switched to buccal');
-    return;
-  }
-  if (text.includes('lingual') || text.includes('palatal') || text.includes('lingal')) {
-    cursor.side = 'lingual'; cursor.pos = 0;
-    updateCursorDisplay(); highlightActive();
-    log('Switched to lingual');
-    return;
-  }
-  if (text.includes('upper') || text.includes('maxillary')) {
-    cursor.arch = 'upper'; cursor.toothIdx = 0; cursor.side = 'buccal'; cursor.pos = 0;
-    updateCursorDisplay(); highlightActive();
-    log('Switched to upper arch');
-    return;
-  }
-  if (text.includes('lower') || text.includes('mandibular')) {
-    cursor.arch = 'lower'; cursor.toothIdx = 0; cursor.side = 'buccal'; cursor.pos = 0;
-    updateCursorDisplay(); highlightActive();
-    log('Switched to lower arch');
-    return;
-  }
-  if (text.includes('next') || text.includes('skip')) {
-    advanceCursor();
-    log('Advanced to ' + getCursorLabel());
-    return;
-  }
+  if(text.match(/next tooth/)){jumpToTooth(nextToothFrom(cur().tooth),'buccal',0);return;}
+  if(text.match(/prev(?:ious)? tooth|back tooth/)){jumpToTooth(prevToothFrom(cur().tooth),'buccal',0);return;}
+  if(text.match(/buccal|facial|buckle/)){jumpToSurface('buccal');return;}
+  if(text.match(/lingual|palatal/)){jumpToSurface('lingual');return;}
+  if(text.match(/upper|maxillary/)){jumpToArch('upper');return;}
+  if(text.match(/lower|mandibular/)){jumpToArch('lower');return;}
+  if(text.match(/^(?:next|skip)$/)){advanceCursor(1);return;}
 
-  // NUMBERS — main pocket depth entry
-  // Extract all digits from speech
-  const nums = wordsToDigits(text);
-  if (nums.length > 0 && nums.every(n => n >= 0 && n <= 12)) {
-    const t = getCursorTooth();
-    const side = cursor.side;
-    const arr = side === 'buccal' ? chart[t].buccal : chart[t].lingual;
-    nums.slice(0, 3 - cursor.pos).forEach((n, i) => {
-      arr[cursor.pos + i] = n;
-      renderCell(t, side, cursor.pos + i);
-    });
-    log(`Entered ${nums.join(' ')} → #${t} ${side}`);
-    if (autoAdvance) {
-      for (let i = 0; i < nums.length; i++) advanceCursor();
+  // ── NUMBER ENTRY (core feature) ──
+  // Handle strings like "3 2 3" or "three two three" or single "4"
+  const nums = wordsToNums(text);
+  if(nums.length>0 && nums.every(n=>n>=0&&n<=12)){
+    const c=cur();
+    const side=c.side;
+    const arr=side==='buccal'?chart[c.tooth].buccal:chart[c.tooth].lingual;
+
+    // Fill from current position, up to 3 numbers or remaining cells in tooth
+    let filled=0;
+    for(let i=0;i<nums.length&&i<3;i++){
+      const pos=c.pos+i;
+      if(pos>=3) break;
+      arr[pos]=nums[i];
+      renderCell(c.tooth,side,pos);
+      filled++;
     }
+    log(`#${c.tooth} ${side}: ${nums.slice(0,filled).join(' ')}`);
+    if(autoAdvance) advanceCursor(filled);
     return;
   }
 
-  log('Not recognized: "' + text + '"', true);
+  log('Not recognized: "'+text+'"',true);
 }
 
-// ——— CLEAR ———
-function clearAll() {
-  if (!confirm('Clear all perio data?')) return;
-  [...UPPER_TEETH, ...LOWER_TEETH].forEach(t => {
-    chart[t] = {
-      buccal: [null,null,null], lingual: [null,null,null],
-      bleedB: [false,false,false], bleedL: [false,false,false],
-      suppB: [false,false,false], suppL: [false,false,false],
-      furc: [0,0,0], missing: false, implant: false
+function nextToothFrom(tNum){
+  const arr=UPPER.includes(tNum)?UPPER:LOWER;
+  const i=arr.indexOf(tNum);
+  return arr[Math.min(i+1,arr.length-1)];
+}
+function prevToothFrom(tNum){
+  const arr=UPPER.includes(tNum)?UPPER:LOWER;
+  const i=arr.indexOf(tNum);
+  return arr[Math.max(i-1,0)];
+}
+
+// ══════════════════════════════════════════════════════
+// AUTO-ADVANCE TOGGLE
+// ══════════════════════════════════════════════════════
+function toggleAutoAdvance(){
+  autoAdvance=!autoAdvance;
+  const btn=document.getElementById('aaBtn');
+  btn.textContent=autoAdvance?'▶ Auto-advance ON':'▶ Auto-advance OFF';
+  btn.style.borderColor=autoAdvance?'var(--accent)':'';
+  btn.style.color=autoAdvance?'var(--accent)':'';
+}
+
+// ══════════════════════════════════════════════════════
+// SETUP SCREEN LOGIC
+// ══════════════════════════════════════════════════════
+function buildMissingGrid(containerId, teeth) {
+  const el=document.getElementById(containerId);
+  el.innerHTML='';
+  teeth.forEach(t=>{
+    const btn=document.createElement('button');
+    btn.className='missing-btn'; btn.textContent=t; btn.id='mb-'+t;
+    btn.onclick=()=>{
+      chart[t].missing=!chart[t].missing;
+      btn.classList.toggle('marked',chart[t].missing);
     };
-    renderTooth(t);
+    el.appendChild(btn);
   });
-  cursor = { arch: 'upper', toothIdx: 0, side: 'buccal', pos: 0 };
+}
+
+function parseMissingText(){
+  const val=document.getElementById('missingInput').value;
+  const nums=val.match(/\d+/g);
+  if(!nums) return;
+  // Reset all first
+  ALL_TEETH.forEach(t=>{ chart[t].missing=false; const b=document.getElementById('mb-'+t); if(b) b.classList.remove('marked'); });
+  nums.forEach(n=>{
+    const t=parseInt(n);
+    if(ALL_TEETH.includes(t)){
+      chart[t].missing=true;
+      const b=document.getElementById('mb-'+t); if(b) b.classList.add('marked');
+    }
+  });
+}
+
+function startCharting(){
+  patientName=document.getElementById('setupName').value||'Unknown Patient';
+  visitDate=document.getElementById('setupDate').value||new Date().toLocaleDateString('en-US');
+  provider=document.getElementById('setupProvider').value||'';
+
+  // Apply missing from grid state (already set via clicks)
+  buildSequence();
+  seqIdx=0;
+
+  // Render chart
+  ALL_TEETH.forEach(renderTooth);
+
+  // Update header
+  document.getElementById('ptInfo').textContent=
+    patientName+(provider?' — '+provider:'')+' | '+visitDate;
+
+  // Switch phases
+  document.getElementById('setupPhase').classList.remove('active');
+  document.getElementById('chartPhase').classList.add('active');
+
+  updateProgress();
   updateCursorDisplay();
   highlightActive();
+  setupVoice();
 }
 
-// ——— PRINT ———
-function printChart() { window.print(); }
+// ══════════════════════════════════════════════════════
+// SAVE PDF & NEW CHART
+// ══════════════════════════════════════════════════════
+function saveAndExport(){
+  // Add patient name to title for print
+  document.title='Perio Chart — '+patientName+' — '+visitDate;
+  window.print();
+}
 
-// ——— INIT ———
-buildArch('upperArch', UPPER_TEETH, '▲ Maxillary (Upper) — Teeth #1–16');
-buildArch('lowerArch', LOWER_TEETH, '▼ Mandibular (Lower) — Teeth #17–32');
-[...UPPER_TEETH, ...LOWER_TEETH].forEach(renderTooth);
-setupVoice();
-document.getElementById('micBtn').addEventListener('click', toggleMic);
+function newChart(){
+  if(!confirm('Save PDF first? Click OK to start a new blank chart (current data will be cleared).')) return;
+  // Stop mic
+  if(listening){ listening=false; if(recognition) recognition.stop(); }
+  // Reset
+  initChart();
+  document.getElementById('chartPhase').classList.remove('active');
+  document.getElementById('setupPhase').classList.add('active');
+  document.getElementById('setupName').value='';
+  document.getElementById('setupProvider').value='';
+  document.getElementById('missingInput').value='';
+  document.getElementById('clinicalNotes').value='';
+  document.getElementById('setupDate').value=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
+  buildMissingGrid('missingUpper',UPPER);
+  buildMissingGrid('missingLower',LOWER);
+  // Rebuild arch DOM (reset cells)
+  buildArch('upperArch', UPPER, '▲ Maxillary (Upper) — #1–16');
+  buildArch('lowerArch', LOWER, '▼ Mandibular (Lower) — #17–32');
+  ALL_TEETH.forEach(renderTooth);
+}
 
-// Set today's date
-const now = new Date();
-document.getElementById('visitDate').value = now.toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'});
-
-updateCursorDisplay();
-highlightActive();
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+buildArch('upperArch', UPPER, '▲ Maxillary (Upper) — #1–16');
+buildArch('lowerArch', LOWER, '▼ Mandibular (Lower) — #17–32');
+buildMissingGrid('missingUpper', UPPER);
+buildMissingGrid('missingLower', LOWER);
+document.getElementById('setupDate').value=new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
 </script>
 </body>
 </html>
